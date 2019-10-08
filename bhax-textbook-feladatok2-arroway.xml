@@ -1,0 +1,419 @@
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:lang="hu">
+    <info>
+        <title>Helló, Arroway!</title>
+        <keywordset>
+            <keyword/>
+        </keywordset>
+    </info>
+    <section><title>Olvasónapló</title>
+    <para>Az objektumorientált programozás lényegét az adatabsztrakció,öröklődés és a polimorfizmus
+        szavakkal foglalhatjuk össze. Az öröklődés legegyszerűbb esete amikor egy osztályt egy már
+        létező osztály kiterjesztésével definiálunk. 
+    </para>
+    
+    <para>A kiterjesztés jelentheti új műveletek és/vagy új változók bevezetését. 
+    </para>
+    <para>Az osztályok rokonsági viszonyainak összeségét osztályhierarchiának hívjuk amit gyakran
+        mint fentről lefelé növő fát ábrázolnak az Object osztályból ágaztatva.
+    </para>
+    <para>Az Object osztály egy kiemelt osztály amely java.langba csomagba tartozik. Object implicit
+        módon minden osztálynak szülője amely nem más osztályból származik vagyis amelynek
+        definiciójában nem adjuk meg az extends tagot.Object minden más osztálynak az őse. Az object
+        típusú változók felelnek meg a Java nyelvben a típus nélküli mutatóknak,hiszen tetszőleges
+        típusú objektumra (beleértve tömböket is) hivatkozhatnak.
+    </para>
+    <para>Minden elemre külön lehet szabályozni annak láthatóságát.Public a külvilág számára
+        látható. Egy elem lehet csak a leszármazottak(protected) vagy senki más számára sem
+        látható(private) is. Ha a megjelölés elmarad, akkor az adott elem csak a forrásszöveg a
+        környezetében, az adott csomagban lesz látható, a külvilág számára nem. 
+    </para>
+    <para>A nyelvnek van egy másik fontos eleme,amely nem része az osztályoznak, ez az interfész.Az
+        interfész már az Objective-C nyelvben is szerepelt protokoll néven, ezt a Java fejlesztői is
+        átvették és kissé módosították. Egy interfész egy új referencia típus, absztrakt metódusok
+        deklarációjának és konstans értékeknek az összessége.Az interfészek az egyik alapvető
+        tulajdonsága,hogy benne található metódusok csak deklarálódnak, vagyis megvalósítás nélkül
+        szerepelnek.
+    </para>
+    <para>Az interfészek felületet definiálnak. Egy interfész tényleges használata az
+        impletentációján keresztül történik. Egy osztály implementál egy interfészt, ha az összes
+        interfész által specifikált metódushoz implementációt ad. Ezáltal az absztrakt program
+        konkréttá válik.
+    </para>
+    </section>
+    <section>
+        <title>OO szemlélet</title>
+        <para>A legelső feladatunk amellyel foglalkoznunk kellett az a Polárgenerátor. Ezzel a
+            Polárgenerátorral random számokat tudunk képezni. Először Javaban majd C++ nyelven
+            kellett megnézni ezeket a feladatokat a fólia jegyzeteinek köszönhetően , nem volt nehéz
+            dolgunk.</para>
+        <para>A kód : </para>
+        <programlisting language="java" >
+            <![CDATA[>public class PolarGenerator{
+
+	boolean nincsTarolt = true;
+	double tarolt;
+	
+	public PolarGenerator(){
+	nincsTarolt = true;
+	}
+
+	public double kovetkezo(){
+	if(nincsTarolt) {
+	double u1, u2, v1, v2, w;
+	do {
+		u1 = Math.random();
+		u2 = Math.random();
+
+		v1 = 2 * u1 - 1;
+		v2 = 2 * u2 - 1;
+
+		w = v1 * v1 + v2 * v2;
+
+		} while(w >1);
+
+		double r = Math.sqrt((-2 * Math.log(w)) / w);
+
+		tarolt = r *v2;
+		nincsTarolt = !nincsTarolt;
+		return r * v1;
+
+		} else{
+		  nincsTarolt = !nincsTarolt;
+		return tarolt;
+		}
+	}
+	public static void main(String[] args){
+
+	PolarGenerator g = new PolarGenerator();
+
+	for(int i = 0; i&lt;10; ++i)
+		System.out.println(g.kovetkezo());
+	}
+}
+
+]]>
+        </programlisting>
+        
+        <para>Vegyük is sorjába a dolgokat.</para>
+        
+            <programlisting language="java"> <![CDATA[ 
+    public class PolarGenerator{
+
+	boolean nincsTarolt = true;
+	double tarolt;
+	]]>
+            </programlisting>
+        
+        <para>Ebbe az osztályunkba 2 változót fog tartalmazni. Amint láthatjuk, hogy a 2 változó
+            típusa különböző, először is a nincsTarolt egy boolean típusú változó amelynek értéke
+            vagy igaz vagy hamis lehet.  Ez a változóba mondja meg, hogy van e tárolt változónk vagy
+            nincsen. A másik változóba a taroltba pedig  a változó értékét adjunk meg tizedes
+            törtben.
+        </para>
+        
+            <programlisting language="java">
+                <![CDATA[public PolarGenerator(){
+	nincsTarolt = true;
+	}
+	]]>
+	</programlisting>
+        <para>Ezután ebbe konstruktorba a nincsTarolt-at igazzá tesszük.
+        </para>
+        <programlisting language="java"> <![CDATA[
+            public double kovetkezo(){
+	if(nincsTarolt) {
+	double u1, u2, v1, v2, w;
+	do {
+		u1 = Math.random();
+		u2 = Math.random();
+
+		v1 = 2 * u1 - 1;
+		v2 = 2 * u2 - 1;
+
+		w = v1 * v1 + v2 * v2;
+
+		} while(w >1);
+
+		double r = Math.sqrt((-2 * Math.log(w)) / w);
+
+		tarolt = r *v2;
+		nincsTarolt = !nincsTarolt;
+		return r * v1;
+
+		} else{
+		  nincsTarolt = !nincsTarolt;
+		return tarolt;
+		}
+	}
+	]]>
+        </programlisting>
+        
+        <para>Ebbe a kovetkezo nevű függvény fut le a számítás. Ha nincs tárolt értékünk akkor 2
+            értéket számolunk. Akkor ha van tárolt értékünk, akkor pedig azt a tárolt értéket
+            visszaadjuk.</para>
+        
+       <programlisting language="java">
+           <![CDATA[public static void main(String[] args){
+
+	PolarGenerator g = new PolarGenerator();
+
+	for(int i = 0; i&lt;10; ++i)
+		System.out.println(g.kovetkezo());
+	}
+	]]>
+       </programlisting>
+        <para>
+            Ezután a mainben lefut a programunk. Példányosítjuk a PolárGenerátor osztályt. Ezután egy for
+            ciklusban 10-szer hívjuk meg a kovetkezo() metódust. A program 10 darab random számot
+            fog nekünk kiírni amit itt is láthatunk. 
+        </para>
+        
+        <mediaobject>
+            <imageobject>
+                
+                <imagedata fileref="polar.png"></imagedata>
+            
+            </imageobject>
+            
+        </mediaobject>
+        <para>Ez a program nagyon hasonlít az eredeti, a JDK-s src fájlaiban is megtaláható random
+            generátorra. Itt láthatjuk a Java.util.Random osztályban lévő Randomot és látható benne
+            a hasonlóság.</para>
+        
+        <mediaobject>
+            
+            <imageobject>
+                <imagedata fileref="JavaRandom.png"></imagedata>
+            </imageobject>
+            
+        </mediaobject>
+        <para>Ezután a programunkat megírtuk C++ -ban is. A kódok itt vannak:
+        
+        </para>
+        
+        <para>Először is a header file: 
+        
+        </para>
+            
+        <programlisting language = "c"> <![CDATA[
+#ifndef POLARGEN__H
+#define POLARGEN__H
+
+#include &lt;cstdlib>
+#include &lt;cmath>
+#include &lt;ctime>
+
+class PolarGen
+{
+ public: 
+	PolarGen()
+	{
+	 nincsTarolt = true;
+	 std::srand (std::time (NULL));
+	}
+	~PolarGen()
+	{
+	}
+	 double kovetkezo();
+
+	private:
+	 bool nincsTarolt;
+	 double tarolt;
+};
+#endif
+]]>
+            </programlisting>
+        <para>
+            Itt található a fájlunknak a header fájla. Ebbe találhatóak meg az osztályok. Két
+            elkülöníthető osztályunk van a public és a private. A public az osztályon kívül is
+            elérhető. Ezzel szembe a private csak az adott osztályon belül érhető el.
+        </para>
+        
+        <para> A privateba megtalálható ugyan az a két változónk itt is az egyik változó bool a
+            másik pedig szintén egy tört változó csak úgy mint a Javas kódunkban. 
+        </para>
+        
+            <programlisting language = "c"> <![CDATA[
+#include "polargen.h"
+
+double
+PolarGen::kovetkezo ()
+{
+  if (nincsTarolt)
+   {
+	double u1, u2, v1, v2, w;
+	 do 
+	  {
+	    u1 = std::rand () / (RAND_MAX + 1.0);
+	    u2 = std::rand () / (RAND_MAX + 1.0);
+	    v1 = 2 * u1 - 1;
+	    v2 = 2 * u2 - 1;
+	    w = v1* v1 + v2 * v2;
+	  }
+	while(w > 1);
+	
+	double r = std::sqrt ((-2 * std::log (w)) / w);
+	
+	tarolt = r * v2;
+	nincsTarolt = !nincsTarolt;
+
+	return r * v1;
+	}
+	else
+	 {
+	   nincsTarolt = !nincsTarolt;
+	   return tarolt;
+	 }
+}
+]]>
+            </programlisting>
+        
+        <para>Amint látható a két nyelv között nincsen óriási különbség. Szintén a számítás csak úgy
+            mint a Java-ban a kovetkezo függvényben megy létre. Abban az esetben, ha a nincsTarolt
+            igaz akkor egy random törtszámot generál, ha hamis akkor pedig visszaadja az előzőleg
+            tárolt értéket.</para>
+        
+        <programlisting language = "c"> <![CDATA[
+            int main (int argc, char **argv)
+ {
+  PolarGen pg;
+	for (int i = 0; i &lt; 10; ++i)
+	std::cout &lt;&lt; pg.kovetkezo() &lt;&lt; std::endl,
+	
+	return 0;
+}
+]]>
+        </programlisting>
+        
+        <para>Csak úgy mint a Javaban, itt is létrehozzuk a mainben a pg PolarGen osztályt és
+            ezután, a for ciklus 10-szer lefut, és a kovetkezo() kiíratja a random számokat. Ezeket
+            az értékeket láthatjuk:
+        </para>
+        
+        <mediaobject>
+            
+            <imageobject>
+                <imagedata fileref= "polarc++.png"></imagedata>
+            
+            </imageobject>
+        
+        </mediaobject>
+    </section>        
+    
+    <section>
+        <title>Gagyi</title>
+        <programlisting language = "c"> <![CDATA[while(x &lt;=t &amp;&amp; x>=t &amp;&amp; tt !=x);]]></programlisting>
+        
+        <para> Ebben a feladatban ezzel a kódcsipettel foglalkoztunk, a feladatunk az volt, hogy
+            ezzel a példaprogrammal egyszer végtelen ciklust, más értékkel pedig ne okozzon.
+        </para>
+        <programlisting language="c" > <![CDATA[ 
+            
+            Public class Gagyi
+{
+    public static void main(String[] args){
+    Integer t = -128;
+    Integer x = -128;
+
+    while (x &lt;=t &amp;&amp; x>=t &amp;&amp; tt !=x){
+        System.out.println("yes");
+        }
+    }
+}
+]]>
+        </programlisting>
+        
+        <para>Ebben a kódcsipetben két Integer objektumot hozunk létre. Fontos tudni,hogy az Integer
+            objektumok egy előre készített poolból veszi az értékeit -128-tól 127-ig. Ilyenkor két
+            objektumunk a memóriacímük megegyezik, azért mert a poolban lévő értékeknek a
+            memóriacímük megegyezik . Ez a while ciklus hamis lesz, azért mert a != opertátor
+            feltétele teljesül , ezért nincs végtelen ciklus. 
+        </para>
+        
+        <mediaobject>
+                <imageobject>
+                    <imagedata fileref="noninf.png"/>
+                </imageobject>
+            </mediaobject>
+        
+        <para>Viszont abban az esetben, hogy ha az értékünk -129, akkor ez már nem fog teljesülni
+            hiszen a -129 nem a pool része ezért a memóriacímük nem fog megegyezni, ezért a while
+            ciklus igaz és ez végtelen ciklust hoz létre. </para>
+        
+            <mediaobject>
+                
+                <imageobject>
+                    <imagedata fileref="infinite.png"/>
+                
+                </imageobject>
+                
+            </mediaobject>
+        
+    </section>
+    
+    <section>
+        <title>Yoda</title>
+        <para>Ebben a feladatban a Yoda feltételekkel foglalkozunk. Köztudott, hogy Yoda a Star Wars
+            filmekben nyelvtantunkhoz képest fordítottan beszél, hiszen először az igéket használja,
+            majd a tárgyat mondja. Pl: "I have a phone." Yoda "nyelvtannal" így hangzik : "Phone, I
+            have."</para>
+        <para>Yoda feltételekben szokástól eltérően a változó értékét bal oldralra írjuk míg jobbra
+            kerül maga a változó neve. Vannak olyan esetek amelyben hasznos tud lenni, azonban nem
+            szokták legtöbbször alkalmazni. Hasznos tud lenni ha null pointer Exception hibákat
+            akarunk elkerülni, azonban a veszélye így is fennáll, hogy ez a hiba későbbiekben
+            fennáll. Ami előny, hogy akkor amikor a konstans bal oldalra kerül, akkor alapvetően nem
+            változtatja meg a program működését. Hátrányok közé sorolható, mint említettem, hogy a
+            null pointer Exception hibákat csak elrejti, hiba továbbra is fennállhat, illetve
+            olvashatóság szempontjából sem a legideálisabb. 
+        </para>
+        <para>Megszokott szintaxus:</para>
+        <programlisting language="java">
+            <![CDATA[
+            int yoda = 5;
+            if (yoda == 5){
+            System.out.println("this statement is true");
+    ]]>
+        </programlisting>
+        
+        <para>Yodás szintaxus</para>
+        
+        <programlisting language="java"> 
+            <![CDATA[
+            int yoda = 6;
+            if (6 == yoda){
+            System.out.println("This statement is also true");
+            ]]>
+        </programlisting>
+        <para>Amint láthatjuk hogy az érték és a változó megcserélődött ebbe a szintaxusban.
+        </para>
+        
+        <para>És akkor a kód:
+        </para>
+            <programlisting language = "java"> <![CDATA[
+    public class Yoda
+    {
+    public static void main(String[]args)
+    {
+	String Yoda = null;
+	if(Yoda.equals("something")){
+	System.out.println("valami más");
+	}
+ }	
+}
+]]>
+            </programlisting>
+        
+        <para>A kód nem követi a Yoda conditions és ezért a programunk leáll java.lang.nullpointExceptionnel. 
+        </para>
+        <mediaobject>
+            
+            <imageobject>
+            
+                <imagedata fileref="yoda.png"></imagedata>
+            
+            </imageobject>
+        
+        </mediaobject>
+    </section>    
+       
+</chapter>      

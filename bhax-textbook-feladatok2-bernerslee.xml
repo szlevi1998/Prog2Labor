@@ -1,0 +1,68 @@
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:lang="hu">
+    <info>
+        <title>Helló, Berners-Lee!</title>
+        <keywordset>
+            <keyword/>
+        </keywordset>
+    </info>
+    
+    <section>
+        <title>Olvasónapló: C++: Benedek Zoltán, Levendovszky Tihamér Szoftverfejlesztés C++ nyelven és 
+            Java: Nyékyné Dr. Gaizler Judit et al. Java 2 útikalauz programozóknak 5.0 I--II.II.</title>
+        <para>A Java és a C++ magasszintű, objektumorientált programozási nyelv. Nagyon sok
+            hasonlóság van a két nyelvben, hiszen a Java nagyon sok dolgot vett át a C++ tól. A Java
+            viszont újabb ezért a fejlesztők sokat dolgoztak azon, hogy a Java kódok megbízhatóbbak,
+            biztonságosabb és emelett platformfüggetlenek legyenek. Mint említettem, a két nyelv
+            objektumorientált, de a C++ nem kötelez arra hogy osztályokba dolgozzunk, ezzel szembe a
+            Javaban csak objektumorientáltan lehet dolgozni.  </para>
+        <para> A Java és a C++ szintaxisa nagyon hasonló, hiszen a Java a C és a C++ szintaxisán
+            alapszik. Természetesen vannak apróbb különbségek. Később kifejtem... </para>
+        
+        <para> A két nyelv mint említettem nagyon hasonlít azonban van egy nagy különbség. A
+            memóriakezelés a C++-ban manuális míg Javaban a memóriakezelést a Garbage collection
+            "szemét gyűjtő" végzi ezt a munkát. A Javaban a rendszer önmaga kezeli a memóriát és ha
+            rendszer úgy érzi, hogy betelik a memória, akkor felszabadít memóriát. A C++-ban a
+            programozónak kell a memóriát kezelnie.  A C++-ban destruktorokat alkalmazunk ahhoz,
+            hogy memóriát szabadítsunk fel. Természtesen mindkettőnek megvannak előnyei, hátrányai.
+            Javaban az előny az, hogy nem kell nekünk kezelni ezeket a memória felszabadításokat,
+            amely egy nagyobb projektnél egy nagyon kényelmes funkció, azonban mi ezt nem tudjuk
+            írányítani, ezért lehetséges az, hogy feleslegesen tud nagyobb méretű memóriát foglalni
+            a rendszer egy kisebb programhoz, mint amennyire aktuálisan szükségünk van rá.</para>
+    </section>
+<section>
+    <title>Olvasónapló: Python: Forstner Bertalan, Ekler Péter, Kelényi Imre: Bevezetés a
+            mobilprogramozásba. I--II.II. </title>
+    <para>Guido van Rossum 1990-ben a Pythont, amely egy általános célú magasszintű programozási
+            nyelv. Ez a nyelv a fejlesztők számára rengeteg pozitív tulajdonsággal rendelkezik ezek
+            közül pl:dinamikus,objektumorientáltság és a platformfüggetlenség. Python tulajdonképpen
+            egy szkriptnyelv, azonban rendkívül sok csomagot és beépített eljárását tartalmaz, ezért
+            összetett alkalmazások készítésére is alkalmas. </para>
+    
+    <para>Nagyon sok platformokon érhető el pl: Win, Mac, Unix, S60, UIQ, Iphone. A Python egy
+            köztes nyelv, nincs szükség fordításra és linkelésre. Az értelmező (interpreter)
+            interaktívan is használható amelynek segítségével például egyszerűen kezelhetünk
+            (throw-away) programokat is bizonyos funkciók kipróbálására. </para>
+    
+    <para> A nyelv legfőbb jelemzője, hogy behúzásalapú a szintaxisa. A programban szereplő
+            állításokat az azonos szintű behúzásokkal tudjuk csoportokba szervezni, nincs szükség
+            kapcsos zárójelre vagy explicit kulcsszavakra(pl.begin,end). Fontos, hogy a behúzásokat
+            egységesen kezeljük, tehát vagy mindenhol tabot, vagy egységesen szóközt használjuk. </para>
+    
+    <para>A nyelv további sajátossága, hogy a sor végéig tart egy utasítás, nincs szükség a
+            megszokott ';' használatára. Ha egy utasítás több sorban fér csak el, akkor ezt a sor
+            végére '\' (blackslash) jellel lehet jelezni. Amennyiben nem zártunk be minden nyitott
+            zárójelet akkor az utasítás folytatósorának veszi a következő sort. Az értelmező minden
+            egyes sort úgynevezett tokenekre bont, amelyek közt tetszőleges üres whitespace karakter
+            lehet. Tokenek fajtái:azonosító kulcsszó,operátor,literál. Kulcsszavakat itt is is
+            alkalmazunk pl : lambda,return,while,try stb. </para>
+    
+    <para>Phytonban minden adatot objektumok reprezentálnak. Pythonban nincs szükség a változók
+            típusainak explicit megadására,a rendszer futási időben,automatikusan ,,kitalálja" a
+            változók típusát. Az adattípusok a következők lehetnek: számok, sztringek,ennesek
+            (tuples,n-es), listák, szótárak. A számok lehetnek egészek, lebegőpontosak és komplex
+            számok. Az egész számok lehetnek decimálisak,oktálisak. </para>
+    
+    
+</section>
+    
+</chapter>

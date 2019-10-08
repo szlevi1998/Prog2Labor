@@ -1,0 +1,243 @@
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:lang="hu">
+    <info>
+        <title>Helló, Liskov!</title>
+        <keywordset>
+            <keyword/>
+        </keywordset>
+    </info>
+    
+    <section>
+        <title>Liskov helyettesítés sértése</title>
+        <para> Ebben a feladatban a Liskov helyettesítés sértésére kellett programot írnunk. A híres
+            S.O.L.I.D programozásnak (Tiszta kódolás) az L betűje a Liskov-elv amely arról szól,
+            hogy minden osztályt lehet helyettesíteni a leszármazott osztályával, amellyel a program
+            alapvető működése nem változik. Ebben a feladatban segítségül kaptuk az Udprog repójában
+            lévő forrást. Ez alapján csináltam egy saját programot. Íme :  
+        </para>
+        <programlisting language="c">
+<![CDATA[
+class Jarmuvek{
+public: 
+	virtual void gurul(){};
+};
+
+class Program {
+public:
+
+	void fgv ( Jarmuvek &jarmuvek ) {
+	jarmuvek.gurul();
+	}
+};
+
+class Car : public Jarmuvek
+{};
+
+class Hajo : public Jarmuvek
+{};
+
+int main ( int argc, char **argv )
+{
+	Program program;
+	Jarmuvek jarmuvek;
+	program.fgv ( jarmuvek);
+
+	Car car;
+	program.fgv ( car );
+
+	Hajo hajo;
+	program.fgv ( hajo );
+
+}
+ 
+        ]]></programlisting>
+        <para> Ebben a kódban a Járművek osztály az ősosztály és ebben a gyermekosztályok az autók
+            és a hajók. Itt van egy gurul függvény, amely a problémát okozza, itt minden egyes
+            gyerekosztályra utal azaz a Carra és a hajóra. A Carral semmi gond azonban, a hajó nem
+            tud gurulni, viszont ez így nem igaz ezért a Liskov-elv sérül.  </para>
+    </section>
+    
+    <section>
+        <title>Szülő-gyerek </title>
+        <para>Ebben a feladatban a szülő és gyerek osztály kapcsolatáról foglalkozunk. Ez a feladat
+            a polimorfizmussal és leginkább az öröklődéssel foglalkozik. </para>
+        <para>Az objektumorientált programozás lényegét az adatabsztrakció, öröklődés és a
+            polimorfizmus szavakkal foglalhatjuk össze. Az öröklődés legegyszerűbb esete amikor egy
+            osztályt egy már létező osztály kiterjesztésével definiálunk.</para>
+        <para>C++ és Javaban kellett egy egyszerű programot írnunk, ahol azt kellett  demonstrálni,
+            hogy a szülő osztályon csak a szülő üzeneteit lehet küldeni, a gyerek osztálynak az
+            elemeit pedig nem.</para>
+        <para>Itt látható a kód C++-ban :</para>
+        <programlisting language="c">
+            <![CDATA[]
+#include <iostream>
+using namespace std;
+
+class Parent {
+public : 
+	void parent() {
+	std::cout << " Ez a szülő osztály " << std::endl;
+	}
+};
+
+class Gyerek : public Parent {
+public :
+	void gyerek() {
+	std::cout << " Ez a gyerek osztály " << std::endl;
+	}
+};
+
+int main(){
+	Parent* something = new Gyerek();
+	something->parent();
+	something->gyerek();
+	}
+
+        ]]>
+        </programlisting>
+       <para>
+           Amint látható a kódon van két osztályunk a Parent és a Gyerek osztály.
+       </para>   
+           <programlisting language="c">
+               <![CDATA[
+           class Gyerek : public Parent {
+           
+           ]]>
+           </programlisting>
+        <para> Ebben a sorban látható az, hogy a Gyerek osztálynak átadjuk a Szülő osztályfunkcióit.
+            A c++- ban így lehet átadni egy gyerek osztálynak a szülő osztály funkcióit. </para>
+        
+        
+        <para> Ezután a mainben példányosítunk és meghívjuk ezeket a függvényeket. A gyerek tudja
+            használni a saját és a szülő osztály funkciót, azonban a szülő csak a saját funkcióit
+            tudja alkalmazni, a gyerekét viszont nem. Amint látható a program emiatt a hiba miatt
+            nem is tud lefordulni.</para>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="Szulocpp.png"/>
+            </imageobject>
+        </mediaobject>
+        <para>
+            Itt van a kód Javaban is : 
+        </para>
+        <programlisting language="java">
+            <![CDATA[
+class Parent {
+
+	void parent() {
+	System.out.println("Ez a szülő osztály");
+	}
+}
+
+class Gyerek extends Parent {
+	void gyerek() {
+	System.out.println("Ez a gyerek osztály");
+	}
+}
+
+class Szulo {
+	public static void main(String[] args){
+	Parent something = new Gyerek();
+
+	something.parent();
+	something.gyerek();
+	}
+	
+}
+	
+            ]]>
+        </programlisting>
+        <para> Amint látható egy nagyobb különbség található meg a C++ és a Java közötti programban.
+            A két nyelv szintaktikája alapvetően nagyon hasonlít egymásra. Azonban az öröklődés egy
+            kicsit különbözik.  </para>
+        <programlisting language="java">
+            <![CDATA[
+            class Gyerek extends Parent
+            ]]>
+        </programlisting>
+        <para> Amint látható az öröklődést itt az extends kulcsszóval lehet alkalmazni. Amint
+            látható, nincs eltérés, hiszen a gyerek képes alkalmazni a saját és a szülő osztály
+            funkciót, és itt is a szülő csak a saját funkcióit tudja elérni, a gyerekét nem. </para>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="Szulojava.png"/>
+            </imageobject>
+        </mediaobject>
+        
+    </section>
+    <section>
+        <title>Anti OO </title>
+        <para> Ebben a feladatban a BBP algoritmus futási időit hasonlítgatjuk össze. 
+            Sajnos az erősebb gépemen a Linux nagyon sokat crashel ezért nem tudok teljes eredményt mutatni, ezért csak virtualboxos adatot tudok felmutatni. Az alábbi eredményeket kaptam:  
+            
+        </para>
+        <table>
+            <title>Összehasonlítás</title>
+            <tgroup cols="4">
+                <colspec colname="c1"/>
+                <colspec colname="c2"/>
+                <colspec colname="c3"/>
+                <colspec colname="c4"/>
+                <thead>
+                    <row>
+                        <entry/>
+                        <entry>C</entry>
+                        <entry>C#</entry>
+                        <entry>Java</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry>10^6</entry>
+                        <entry>4.168</entry>
+                        <entry>3.788</entry>
+                        <entry>3.614</entry>
+                    </row>
+                    <row>
+                        <entry>10^7</entry>
+                        <entry>43.736</entry>
+                        <entry>44.873</entry>
+                        <entry>41.073</entry>
+                    </row>
+                    <row>
+                        <entry>10^8</entry>
+                        <entry>509.181</entry>
+                        <entry>487.927</entry>
+                        <entry>456.563</entry>
+                    </row>
+                </tbody>
+            </tgroup>
+        </table>
+        <para> Amint látható a Java a leggyorsabb nyelv míg a C a leglassabb. A C volt a leglassabb,
+            ami annyira nem is meglepő, hiszen ez a nyelv a legelavúltabb és mivel ez a legrégebbi,
+            ezért nem meglepetés, az sem, hogy a legkevésbbé optimalizáltabb. A Java nyert, hiszen
+            ennek a legjobb a memória managelése. Érdekes volt az látni, hogy ahogy növekedet a
+            hatvány értéke, úgy növekedett az űr a teljesítmények között.  </para>
+    </section>
+    <section>
+        <title>Ciklomatikus komplexitás</title>
+        
+        <para> Ciklomatikus komplexitás egy olyan szoftveres "mértékegység" amellyel a programunknak
+            a komplexitását tudjunk számmal leírni. Ez a mérés a gráfelmélet alapján történik. Ezt a
+            fogalmat McCabe komplexitásnak is nevezzük. Itt a képlete: </para>
+        <programlisting>
+            <![CDATA[
+            M = E − N + 2P
+            ]]>
+        </programlisting>
+        <para>M az a szám amely a komlexitást adja meg. E az a szám amely az éleknek a számát adja
+            abból kivonjuk a gráfnak csúcsai és hozzáadjuk az összes komponens dupláját. Én a ennek
+            a dián(<link xlink:href="https://arato.inf.unideb.hu/batfai.norbert/UDPROG/deprecated/Prog2_2.pdf"/>) 78. oldalán lévő programkódcsipetnek a komplexitását mértem. A www.lizard.ws oldalon
+            néztem meg az eredményét és a következő látható : </para>
+        <mediaobject>
+            <imageobject>
+                <imagedata fileref="komplexitas.png"/>
+            </imageobject>
+        </mediaobject>
+        <para>Amint láthatjuk a komplexitás ennek a kód részletnek 15. Egy jól megírt, struktúrált
+            kód körülbelül 1 és 10 között van. 15 már egy komplex kódnak számítható, azonban nem
+            olyan komplikált. Ez a kód még jól tesztelhető, azonban ha 20 fölötti az értékünk akkor
+            már egy nagyon komplikált kódról beszélhetünk. 40 fölötti érték már tesztelhetlen és
+            ilyenkor át kell gondolnunk  újra a programot hiszen a kódunk túlságosan komplex. </para>
+    </section>
+    
+</chapter>
