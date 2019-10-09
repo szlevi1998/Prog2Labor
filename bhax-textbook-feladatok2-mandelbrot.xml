@@ -5,17 +5,118 @@
             <keyword/>
         </keywordset>
     </info>
-    
+    <section><title>Reverse engineering UML osztálydiagram</title>
+        <para>Az UML egy szabványos, egységesített grafikus modellezőnyelv. A forráskód olyan dokumentum, ami egyértelműen definiálja a program működését.
+            Az UML szabványos lehetőségeket kínál a rendszer felvázolásához, beleértve a fogalmi dolgokat, mint üzleti modellezés és rendszerfunkciók, valamint a  konkrét dolgokat, mint programnyelvi utasítások, adatbázis sémák és újrafelhasználható szoftverkomponensek.
+           
+        </para>
+    <para>Ebben a feladatban az LZW binfájából kellett egy UML osztálydiagramot rajzolni. BPMN
+            feladathoz hasonlóan itt is a visual paradigmet alkalmaztam. Bár nem tudom, hogy melyik
+            Binfa a legmegfelelőbb ehhez a feladathoz, de én a z3a7.cpp- vel próbáltam ki. Eléggé
+            egyszerű volt a feladat hiszen csak annyit kellett csinálni, hogy a tools opcióba, mint
+            a feladatnevéből kiindulva reverselni kellett a kódot. Ezt az eredményt kaptam :   </para>
+       
+       <mediaobject><imageobject><imagedata fileref="Reverse.png"></imagedata></imageobject></mediaobject>
+        
+        <para> A Visual paradigm szépen lerajzolja, ezt a binfát UML verzióban. Amint látható jól
+            elkülöníthető részeket láthatunk. Vannak Globális függvényeink, de ezek nem sok vizet
+            zavarnak, hiszen nincsenek ágazásaiak.
+        </para>
+            <para>Két osztályunk van a Csomópont és a LZWBinfa ezeknek vannak tagjai. Amint
+            láthatjuk vannak jeleink (-+#) ezek a láthatóságát jelöli. A - jel, azt jelenti, hogy a
+            tagunk private a + a public és a # amely a protected jelzi. Csomópont osztályban van egy
+            olyan tag, amely önmagával kapcsolja össze magát. Ezeket az összekapcsolásokat amely
+            osztályok között vannak asszociációnak nevezzük.</para>
+        
+        <para> Az asszociációban az osztályok között az osztályok léte független, azonban a
+            osztályok legtöbb esetben legalább egy osztály ismeri a másikat. Az asszociációnak két
+            fajtája van az erős és gyenge aggregáció. A gyenge aggregáció, olyan amikor egy objektum
+            létezhez magában is, de lehet másnak is része. Ennek a jele az UML-ben az üres
+            rombusz.</para>
+        <para>Az erős aggregációt kompoziciónak is nevezzük, ekkor a részek élettartalma szigorúan
+            megegyezik az egészével. A tartalmazó nem létezhet a tartalmazott nélkül. Ennek jele az
+            UML-ben  a jele a telített rombusz.  </para>
+        <para>Bár az én visual paradigmon ezeket a jelöléseket nem mutatja, mint az erős aggregációt
+            (kompoziciót), viszont ha az egerünket rámutatjuk a kapcsolatra akkor kiírja, hogy
+            asszociáció van a két osztály között. Láthatunk szaggatott vonalas nyilat, amely azt
+            jelenti, hogy depedency (függőség) van az LZWBinfa és a Csomópont osztáyok között. Ez
+            azt jelenti,hogy ha valami változás lesz a Csomópont osztályban akkor kihatással lesz az
+            LZWBinfa osztályra is.</para>
+        
+    </section>
     <section><title>Forward engineering UML osztálydiagram</title>
-      
+        <para>Ebben a feladatban az előző feladatnak az ellentétjét kellett csinálni, itt UML
+            osztályokból kellett programot készíteni. Forward engineering az a lényege, hogy egy
+            program kódot struktúráltan, átláthatóan építsünk fel. Ennek az az előnye, hogyha egy
+            komplikált kódot írunk, akkor gyorsan orvosolhatjuk a problémákat.  </para>
+        <mediaobject><imageobject><imagedata fileref="race.png"></imagedata></imageobject></mediaobject>
+       
+       <para>Ezen az ábrán van három osztályom, és ebből tudtam kódot generálni a Visual
+            paradigmmel. Ezzel a programmal és természetesen az UML-s módszerrel nagyon egyszerűen,
+            lehet illusztrálni, hogy hol van asszociáció, öröklődés a programunkban. Ez azért nagyon
+            praktikus, mert ezzel sokkal gyorsabban lehet változtatni a teljes projekten.
+            Gyakorlatilag egy nyíl "áthuzásával" nagyon sok sornyi programkódot lehet módosítani,
+            átírni. A kisebb projekteken, mint az enyémen, annyira nem hatásos, mert nagyon kevés
+            adatot tartalmaz, de itt is hasznos, mert ellenőrzésnek tökéletesen megfelel. </para>
+       
     </section>
     
     <section><title>BPMN</title>
+        <para>A BPMN (Business Process Modeling Notation) egy olyan folyamatábra, amely az üzleti folyamatok grafikus modellezését szolgálja.
+         Üzleti elemzőknek és technológiai fejlesztőknek szóló grafikus jelölőnyelv. </para>
+        <para>Az üzleti folyamatok ábrázolására, bemutatására, az EPC és a BPMN módszerek a legelterjedtebbek. Az egyszerű folyamatok ábrázolásától a komplex vállalati folyamatrendszerekig képesek mindent vizualizálni. 
+      Ahhoz,hogy a valóságról kapjunk egy képet, amely alapján tudjuk elemezni majd fejleszteni a folyamatainkat elengedhetetlen, hogy azokat grafikailag ábrázoljuk.</para>
+        <para>Több fajtája is van:  </para> 
+        <para>                                -BPML (XML alapú) </para> 
+        <para>                                 -BPEL (XML alapú) </para>    
+        <para>                                 -XDPL (XML alapú) </para>
+        <para>                                 -BPMN (Grafikus jelölésre alkalmas) </para>   
+       
+        <para> Ebbe a feladatban rajzolnunk kell egy saját folyamatábrát. Nem igazán alkalmaztam
+            ezelőtt UML-t és ezért volt egy kisebb dilemmám, hogy milyen szoftvert alkalmazzak.
+            Végül a Visual Paradigm-ot választottam, annak is a 30 napos próba verzióját. Egészen
+            egyszerűen lehetett alkalmazni ezt a programot, és elkészítettem a saját folyamatomat.
+            Íme : </para>
+        <mediaobject>
+            <imageobject><imagedata fileref="diagram.png"></imagedata>
+            </imageobject>
+            
+            </mediaobject>
         
+        <para>Amint a képen látható egy étteremből való rendelését vezettem le. Látható egy a zöld
+            karika, ez a kezdőpontunk. Ez a tevékenység, amely létrehozza, ezt a teljes folyamatot.
+            Láthatunk két nagyobb halmazt, ez a két halmaz, amely a teljes folyamatot képezi. Ez a
+            két halmaz kapcsolatba van egy mással. Láthatjuk, hogy többször is összekapcsoltam a két
+            halmazt. Ez azért van, mert egyes tevénykenységet egy adott halmaz nem tehet meg a másik
+            "engedélye nélkül." </para>
+        <para> Láthatunk a képen sárga téglalapokat, ezek a részfolyamatok. Emelett van két piros
+            karikánk. Ez a két piros karika amely jelzi a folyamatunknak a végét. Mivel mindkét
+            halmaznak van egy adott teljes folyamata,ezért mindkét halmazt le kell zárni.</para>
+        <para>Természetesen ez a folyamat ábra nagyon egyszerű, a képen látható, hogy lehet
+            belerakni gatewayeket, amelyek arra képesek hogy egy folyamatnak több elágazása legyen.
+            Bár én nem illusztráltam a képemen de lehet olyat is csinálni, hogy beszúrok egy
+            gatewayt az étterem felhívásnál és ha ott adok egy olyan opciót, hogy az étterem zárva,
+            akkor a teljes folyamatnak adhatok egy végpontot.   </para>
     </section>
     
     <section><title>BPEL Helló, Világ! egy visszhang folyamat</title>
-        
+        <para>BPEL (Business Process Execution Language) üzleti folyamatok modellezésének végrehajtó
+            nyelve. XML alapú folyamatleíró nyílt szabványt alkalmaz. Elsősorban üzleti folyamatok
+            leírására használatos, de egységessége és elterjedtsége miatt sokszor használják
+            munkafolyamatok leírását igénylő feladatokban is. </para>
+        <para>Minden egyes BPEL aktivitás egy külső, kiegészítő nyelven elkészített parancs meghívásával jár. A kiegészítő nyelv leggyakrabban Java , de lehet más, magas szintű script-nyelv is.  
+            A BPEL nyelvet a Microsoft és az IBM fejlesztette, illetve a korábbi BPML Üzleti folyamatokat modellező nyelvet használták fel.
+        </para>
+        <para>Ebben a feladatban egy olyan webszervert kellett csinálni amelyben, ha egy string
+            inputot adunk akkor a szervernek az output ugyan az a string legyen. A feladatot a
+            Youtube-os link alapján csináltam, amely a pdf-ben található. Mivel ez a feladat
+            "zöldes" (deprecated) eléggé nehéz volt a megtalálni a megfelelő szoftvereket találni. A
+            legnagyobb problémám azzal adódott, hogy valamiért az Eclipsem a szerverindításnál a
+            portjaimat mindig foglaltnak tituálta. Végül sikerült a szervert elindítani és ezután
+            már csak ki kellett próbálni, hogy működnek a funkciók. </para>
+        <para>Itt látható ezen a képen, hogy a szerver működik.</para>
+        <mediaobject><imageobject><imagedata fileref="server.png"></imagedata></imageobject></mediaobject>
+        <para>Valamilyen bug miatt az Eclipsemnél nem dobja fel a webservices opciót amivel tudnám a szimulálni a programomat. Ezt a hibát szeretném kijavítani később.</para>
     </section>
     
 </chapter>
