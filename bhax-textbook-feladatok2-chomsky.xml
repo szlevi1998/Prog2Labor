@@ -1,0 +1,256 @@
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:lang="hu">
+    <info>
+        <title>Helló Chomsky!</title>
+        <keywordset>
+            <keyword>Objektumorientált programozási nyelvek programnyelvi elemei: karakterkészlet,
+                lexikális egységek, kifejezések,utasítások</keyword>
+        </keywordset>
+    </info>
+    
+    <section>
+        <title>Encoding</title>
+        <para>Ezt a feladatot az órán elkezdtük, azzal a problémával találkozunk, hogy a
+            mandelbrotnagyító nem fordul le, az ékezetes betűkkel. Először is a problémánk az, hogy
+            ne essünk abba a hibába mint én. Ami a PDF linkjében linkelt feladat önmagában sose
+            fordul le, hiszen ez egy teljes projekt, nem csak egy programfájl. Amint fordítjuk a
+            programunk még több hibával fog fordulni, de ez nem baj hiszen a hibák most már
+            egyértelműek, ugyanis itt a java nem képes a magyar ABC szavait kezelni.</para>
+        
+        <mediaobject><imageobject><imagedata fileref="mandelbrot1.png"></imagedata></imageobject></mediaobject>
+        
+        <para>Amint láthatjuk a képen, hogy az ékezetes betűk nem mappelhető karakterek. Ezek után
+            utána kellett nézni, hogy milyen karakterkódolást kell alkalmaznunk, ahhoz hogy ezek a
+            karakterek alkalmazhatóak legyenek. Én gyors keresés után a Java doksiknál megtaláltam
+            azt, hogy magyar karakterek alkalmazásához enconding kapcsolót kell alkamaznunk. A
+            magyar karakterekhez a Latin 2-t kellett alkalmazni és ahhoz, hogy ezt működtessük, a
+            fordításnál ezt a kapcsolót kell alkalmaznunk, az alábbi kép alapján.
+        </para>
+        <mediaobject><imageobject><imagedata fileref="mandelbrot2.png"></imagedata></imageobject></mediaobject>
+        <para>Itt a kép a fordításról.</para>
+        <mediaobject><imageobject><imagedata fileref="mandelbrot3.png"></imagedata></imageobject></mediaobject>
+        <para>Itt a kép a programról.</para>
+        <mediaobject><imageobject><imagedata fileref="mandelbrot4.png"></imagedata></imageobject></mediaobject>
+        <para>Itt a kép a futásról és a nagyításról.</para>
+        <para>Amint láthatjuk, a program ezek után gond nélkül fut és fordul. A képen a kedvünkre
+            tudunk nagyítani, ott ahol akarunk.</para>
+      
+    </section>
+
+    <section><title>Full screen</title>
+    <para>Ebben a feladatban az volt a lényeg, hogy egy olyan Java kódot írjunk amelyben, teljes
+            képernyőt alkalmazunk.</para>
+        <programlisting language="java">
+            <![CDATA[
+            import javax.swing.*;
+
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+
+
+public class Fullscreen {
+	
+	public static void main(String[] args) {
+		
+		JButton clickme = new JButton("Click me!");
+		clickme.setBounds(180, 100, 200, 50);
+		clickme.setFont(new Font("Times New Roman", Font.PLAIN, 11));
+		
+		JButton click = new JButton("Don't click me!");
+		click.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		click.setBounds(400, 100, 250, 50);
+		
+		click.addMouseListener(new MouseAdapter() {
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			System.exit(0);
+		}
+		});
+		
+		JPanel panel = new JPanel();
+		panel.setBackground(new Color(0, 191, 255));
+		panel.setBounds(200, 200, 900, 300);
+		
+		panel.add(click);
+		panel.add(clickme);
+		panel.setLayout(null);
+		
+		
+		JFrame frame = new JFrame("Fullscreen");
+
+		
+		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setUndecorated(false);
+		frame.setVisible(true);
+		frame.getContentPane().setLayout(null);
+		frame.getContentPane().setBackground(new Color(255, 255, 0));
+		frame.getContentPane().add(panel);
+	
+	}
+
+}
+
+            
+            ]]>
+        </programlisting>
+        <para>Lássuk is a kódunkat. </para>
+        <programlisting language="java">
+            <![CDATA[
+            JButton clickme = new JButton("Click me!");
+		clickme.setBounds(180, 100, 200, 50);
+		clickme.setFont(new Font("Times New Roman", Font.PLAIN, 11));
+            
+   ]]>
+        </programlisting>
+  
+        <para>Ebben a részben létrehozok egy Java Buttont amely clickmenek nevezek el. "" részben
+            adtam meg, hogy a gombra mi legyen ráírva. Aztán a setBoundssal megadom a gombnak a
+            helyzetét (x,y tengelyen) illetve a magasságát és a szélességét. Emellett változtatok a
+            gomb betű típusán a méretét és a stílusát itt például dőltre. </para>  
+        <programlisting language = "java">
+            <![CDATA[
+         JButton click = new JButton("Don't click me!");
+		click.setFont(new Font("Times New Roman", Font.BOLD, 15));
+		click.setBounds(400, 100, 250, 50);
+		
+		click.addMouseListener(new MouseAdapter() {
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			System.exit(0);
+		}
+		});   
+            
+         ]]>
+        </programlisting>
+    <para>Itt létrehozok még egy gombot ez nagyon hasonlít a másik gombra,annyi különbséggel, hogy
+            mássabb a betűstílusa mérete és természtesen amit kiírok. MouseListener az egy olyan
+            listener amely arra figyel, hogy ha rákattintok akkor az alkalmazást bezárja. </para>
+        <programlisting language= "java">
+            <![CDATA[
+            
+            JPanel panel = new JPanel();
+		panel.setBackground(new Color(0, 191, 255));
+		panel.setBounds(200, 200, 900, 300);
+		
+		panel.add(click);
+		panel.add(clickme);
+		panel.setLayout(null);
+		]]>
+        </programlisting>
+        <para>Itt létrehozok egy panelt amelynek a setboundssal adok méretet és poziciót. Illetve a
+            setbackgrounddal ennek a tálcának adok egy háttérszínt. A tálcához hozzáadom a gombokat
+            a panel.add metódussal.</para>
+        <programlisting language="java"><![CDATA[
+            JFrame frame = new JFrame("Fullscreen");
+
+		
+		frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setUndecorated(false);
+		frame.setVisible(true);
+		frame.getContentPane().setLayout(null);
+		frame.getContentPane().setBackground(new Color(255, 255, 0));
+		frame.getContentPane().add(panel);
+	
+	}
+
+}
+            
+]]>
+</programlisting>
+        <para>Ablakot itt hozzuk létre, a JFrame-mel és " Fullscreen " a cím viszont ezt nem
+            láthatjuk, ugyanis a frame.setUndecorated(false) zároljuk, és ezzel nem látjuk a
+            címsort. Azonban ezzel a metódussal, még nem változik teljes képernyőssé a programunk.
+            Ezt frame.setExtendedState(JFrame.MAXIMIZED_BOTH);  ezzel a metódussal maximalizáljuk a
+            szélességét és a magasságát az ablaknak. </para>
+        <para>Emelett még ahhoz, hogy ablak látható legyen a frame.setVisible(true)-t alkalmazzuk.
+            Abban az esetben, ha false az értékünk, akkor nem láthatjuk az ablakunkat. Állítottam
+            egy háttérszínt az ablaknak frame.getContentPane().setBackground(new Color(255, 255,
+            0));-al és ezek után legutoljára, hozzáadtam a ablakhoz a tálcánkat, így válik teljessé
+            a programunk.  </para>
+        <mediaobject><imageobject><imagedata fileref="fullscreen.png"></imagedata></imageobject></mediaobject>
+        
+    </section>
+    <section><title>Paszigráfia Rapszódia OpenGL full screen vizualizáció</title>
+    <para>Ebben a feladatban egy OpenGL-es projektben kellett kisebb változtatásokat alkalmazni.
+            Először is rengeteg dolgot felrakni, ahhoz hogy a programkódunk fusson és forduljon.
+            Szükségünk volt a libboost-ra, az OpenGL-re és emelett számos update-ra. Ezek a
+            szükséges szoftverek, könyvtárak után a fordítás és a futás sikeresen működött.
+            Szokatlan volt az, hogy az írányítás ellentett volt . Először is rákerestem hogy, hol
+            van a feladatban az írányítás része. Az adott programcsipetetben látható a
+            forgatásrésze. </para>
+        
+        <programlisting language="cpp"> <![CDATA[
+           void skeyboard ( int key, int x, int y )
+{
+        if ( key == GLUT_KEY_UP ) {
+                cubeLetters[index].rotx -= 5.0;
+        } else if ( key == GLUT_KEY_DOWN ) {
+                cubeLetters[index].rotx += 5.0;
+        } else if ( key == GLUT_KEY_RIGHT ) {
+                cubeLetters[index].roty -= 5.0;
+        } else if ( key == GLUT_KEY_LEFT ) {
+                cubeLetters[index].roty += 5.0;
+        } else if ( key == GLUT_KEY_PAGE_UP ) {
+                cubeLetters[index].rotz -= 5.0;
+        } else if ( key == GLUT_KEY_PAGE_DOWN ) {
+                cubeLetters[index].rotz += 5.0;
+        }
+
+        glutPostRedisplay();
+}
+ 
+            
+            
+            ]]>
+        </programlisting>
+     
+        <para> Az eredeti kódban az értékek előtti műveleti jelek megvoltak cserélve, ezért ezeket
+            átírtam az ellentetjére és ezek után kézre álló volt. Természeten, ha az értékeken
+            változtatunk akkor a forgatás mértéke is növekszik vagy csökken.</para>
+    
+    <para>Emellett, az is feladatunk volt, hogy a változtassunk egy kicsit a színvilágon. Nem volt
+            nehéz dolgunk hiszen a programunk nagyon sokszor alkalmazza az OpenGL-ben használt
+            glColor3f függvényt. Ebben a függvényben 3 darab argumentum van és ezek az argumentumok
+            adják meg a színünket. Az értékek az rgb-hez színvilágnak felel meg, hiszen a 3 érték a
+            pirosnak a zöldnel és a kéknek felel meg. A számítása a következő : a választott
+            értékeinket osztani kell 255-el és ezt a törtszámot kell nekünk megadni pl:
+            aranysárgának az értékei : </para>
+        <programlisting language="cpp"> 
+        <![CDATA[
+          glColor3f ( .960f, .772f, .0031f );
+        ]]>
+        </programlisting>
+        <para>Ebbe a kis programcsipetben található a "sima" fehéren hagyott négyzeteket. </para>
+        <programlisting language="cpp"> 
+<![CDATA[
+        void drawPaRaCube ( int idx )
+{
+
+        glPushMatrix();
+
+        int d = cubeLetters.size() /2 ;
+        glTranslatef ( ( idx-d ) *2.5f, 0.0f, 0.0f );
+
+        glRotatef ( cubeLetters[idx].rotx, 1.0f, 0.0f, 0.0f );
+        glRotatef ( cubeLetters[idx].roty, 0.0f, 1.0f, 0.0f );
+        glRotatef ( cubeLetters[idx].rotz, 0.0f, 0.0f, 1.0f );
+
+        glBegin ( GL_QUADS );
+
+        glColor3f ( .0001f, .0001f, .0001f );
+
+            ]]>
+            
+        </programlisting>
+        <para>Itt látható hogy a glColorba átállítottam, 0-ra és ezek után az eredetileg fehér
+            négyzetek feketére változtak. A változások így szembetűnőek. Íme a kép: </para>
+        <mediaobject><imageobject><imagedata fileref="para1.png"></imagedata></imageobject></mediaobject>
+        
+       
+    </section>
+    
+   
+</chapter>
