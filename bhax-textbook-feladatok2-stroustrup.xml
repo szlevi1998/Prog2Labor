@@ -8,24 +8,290 @@
     
     <section>
         <title>JDK osztályok</title>
-        <para> </para>
-        <para>  </para>
+        <para> Ebben a feladatban,azzal kellett foglalkoznunk, hogy  egy olyan c++-os kódot kellett
+            írnunk,hogy a Java JDK osztályáinak a fájlait kellett kiírtani. Ahhoz ,hogy ezt elérjük,
+            először is szükségünk van egy Java JDK-ra amelyből ki tudjuk listázni a fájlokat. Ezután
+            szükségünk van a libboostos könyvtárakra is. </para>
+        <programlisting language="c">
+            <![CDATA[
+        sudo apt-get install libboost
         
+        ]]></programlisting>
+        <para> Illetve a JDK osztályt lehetett volna tölteni az Oracle oldalára,de én nem akartam Oracle fiókot létrehozni, ezért innen töltöttem le : https://bell-sw.com/pages/java-8u232/ 
+        </para>
+        <programlisting language="c"> <![CDATA[
+#include <iostream>
+#include <vector>
+#include <boost/filesystem.hpp>
+
+using namespace std;
+using namespace boost::filesystem;
+
+int main(int argc, char *argv[])
+{
+
+	path p ("src");
+
+	if(!exists(p) || !is_directory(p)) {
+	cout << p << "is not a path" << endl;
+	
+	return 1;
+
+	}
+
+	int fajlok = 0;
+
+	recursive_directory_iterator begin(p), end;
+	vector <directory_entry> v(begin, end);
+	for (auto& f:v){
+	if(path(f).has_extension()){
+	cout << "File: " << path(f).filename() << endl;
+	fajlok++;
+	} else {
+	cout << f << endl;
+		}
+
+
+	}
+	cout << " A fájlok száma: " << fajlok << endl;
+} 	
+        
+        ]]>
+        </programlisting>
+        
+         <programlisting language="c"><![CDATA[
+#include <iostream>
+#include <vector>
+#include <boost/filesystem.hpp>
+
+using namespace std;
+using namespace boost::filesystem;
+    
+         ]]>
+	</programlisting>   
+        <para> Lássuk is a kódot. Amint látható szükségem volt, a libboost osztályokra ezért
+            includeolni kellett. </para>  
+        <programlisting language="c"> <![CDATA[
+            int main(int argc, char *argv[])
+{
+
+	path p ("src");
+
+	if(!exists(p) || !is_directory(p)) {
+	cout << p << " is wrong folder " << endl;
+	
+	return 1;
+
+	}
+
+	int fajlok = 0;]]>
+        </programlisting>
+        <para>Ebben a részben a (mainben) először is megadjuk, hogy melyik mappát vizsgáljuk. Az
+            ifben pedig azt vizsgáljuk, hogy megfelelő mappát vizsgáljuk. Abban az esetben ha nem jó
+            mappát vizsgáljuk akkor, mint a kódban is látható kiadja a program,hogy nem jó mappát
+            vizsgálunk.</para>
+        
+        <mediaobject><imageobject><imagedata fileref="wrong.png"></imagedata></imageobject></mediaobject>
+        
+            <para>A képen is látható,hogy ha nem megfelelő path-t adok neki. Valamint adtam egy fajlok nevű változót amely arra szolgál,hogy majd később a fájlok számát ebbe a változóba tudjuk majd tárolni.
+            </para>
+        <programlisting language = "c"><![CDATA[
+            recursive_directory_iterator begin(p), end;
+	vector <directory_entry> v(begin, end);
+	for (auto& f:v){
+	if(path(f).has_extension()){
+	cout << "File: " << path(f).filename() << endl;
+	fajlok++;
+	} else {
+	cout << f << endl;
+		}
+		
+			}
+	cout << " A fájlok száma: " << fajlok << endl;
+}
+
+            
+]]>
+        </programlisting>
+        <para>Ez a programnak az "agya". Ebben a részben használjuk azokat a libboost-os osztályokat
+            amelyek miatt kellett includeolni a programunkba. A directory iterátorral végigjárjuk az
+            össes directory entryt és amint. Ezeket a bejárásokat egy vectorba rögzíjük. Majd a for
+            ciklusban az iffel megvizsgáljuk, hogy az adott fájlnak van-e utótagja, ha van akkor
+            "File :" előtagot adok neki ezért megtudjuk különböztetni a fájlokat a mappáktól. Addig
+            amíg a for ciklus fut, azaz  addig amíg a bejárások megtörténnek addig növeljük a fajlok
+            értékét. A fajlok növelése addig fut ameddig le nem fut a bejárás. </para>
+    
+        <para>Ezután kiíratjuk, hogy hány darab fájlt találtunk.</para>
+        <mediaobject><imageobject><imagedata fileref="lib.png"></imagedata></imageobject></mediaobject>
         <para></para>
-    </section>
+        <mediaobject><imageobject><imagedata fileref="lib2.png"></imagedata></imageobject></mediaobject>
+         </section>
 <section>
-    <title>Másoló-mozgató szemantika + Összefoglaló</title>
-    <para></para>
+    <title>Másoló-mozgató szemantika </title>
+    <para>Ebben a feladatban példákat kellett mutatni, olyan másoló-mozgató szemantikákra,amelyek a
+            c++11-ben lettek elérhetőek. A Z3a9.cpp (ami tudatom szerint a legfrissebb binfa amit
+            lehet találni).</para>
+        <para>Másoló és mozgató szemantika között elsődlegesen azon van a hangsúly, hogy jobbérték
+            referencia kerül-e átadásra vagy balérték, mert jobbérték esetén a mozgató szemantika
+            érvényesül, minden más esetben pedig a másoló konstruktor hívódik meg.</para>
     
-    <para> </para>
+    <para> A másoló szemantika úgy inicializál egy objektumot,hogy egy másik objektumot használ fel
+            a vele azonos osztályból. A dinamikusan lefoglalt változóknál nem elég a mutatókat
+            másolni, új területet kell foglalni, és átmásolni a változó értékét. Az ilyen másolat
+            készítését hívják mély másolásnak (deep copy), ellentétben azzal, amikor csak a
+            mutatókat másoljuk.</para>
+    <programlisting language="c"><![CDATA[
+         LZWBinFa ( const LZWBinFa & regi ) {
+          std::cout << "LZWBinFa copy ctor" << std::endl;
+        
+          gyoker.ujEgyesGyermek ( masol ( regi.gyoker.egyesGyermek (), regi.fa ) );
+          gyoker.ujNullasGyermek ( masol ( regi.gyoker.nullasGyermek (), regi.fa ) );
+
+          if ( regi.fa == & ( regi.gyoker ) )
+               fa = &gyoker;
+
+        ]]></programlisting>
     
-    <para>  </para>
-    
-    <para></para>
-    
-    <para></para>
+    <para>Mint ahogy az outputban is látható, ez a binfa másoló konstruktora. Itt az történik,hogy
+            az új gyökérnek az egyes és nullás gyermekének átadjuk a régi gyökeret. </para>
+    <programlisting language="c"><![CDATA[
+           LZWBinFa ( LZWBinFa && regi ) {
+          std::cout << "LZWBinFa move ctor" << std::endl;
+
+          gyoker.ujEgyesGyermek ( regi.gyoker.egyesGyermek() );
+          gyoker.ujNullasGyermek ( regi.gyoker.nullasGyermek() );
+
+          regi.gyoker.ujEgyesGyermek ( nullptr );
+          regi.gyoker.ujNullasGyermek ( nullptr );
+
+     }
+        
+        ]]></programlisting>
+    <para>Ez pedig a mozgatókonstruktora a binfának. Itt az a lényeg,hogy a binfának a régi fáját
+            mozgatjuk egy másik memóriacímre míg a régit töröljük. A régi gyökérnek az egyes és
+            nullás gyerekét is nullpointerrel tesszük egyenlővé,azaz lenullázzuk.  </para>
        
 </section>
-    <section><title>Hibásan implementált RSA törése</title></section>
-    
+    <section><title>Változó argumentum ctor</title>
+        <para>Ebben a feladatban az volt lényeg,hogy a prog 1-es példában is használt Perceptron
+            osztály ne egy értéket adjon vissza, hanem egy ugyanakkora méretű képet kell visszadnia. </para>
+        <para>Mielőtt a feladatra térnénk, fontos kiemelni, hogy a programhoz szükséges több fontos
+            könyvtár ami lehetséges hogy nincs meg egyből. Ilyen például a libbpng amely feltétlenül
+            szükséges és fontos, bár nem tudom, hogy csak nálam okozott problémát, de szükséges a
+            linkgrammar is. </para>
+        <para> Ennek a projektben 2 fontos fájlunk van és mind a két fájlban, kellett
+            változtatásokat eszközölni. Először is foglalkozunk a main fájlunkkal. </para>
+        <programlisting language="c"><![CDATA[ 
+#include <iostream>
+#include "mlp.hpp"
+#include <png++/png.hpp>
+
+using namespace std;
+
+int main ( int argc, char **argv )
+{
+  png::image <png::rgb_pixel> png_image ( argv[1] );
+
+  int size = png_image.get_width() *png_image.get_height();
+
+  Perceptron *p = new Perceptron ( 3, size, 256, 1);
+
+  double* image = new double[size];
+
+  for ( int i = 0; i<png_image.get_width(); ++i )
+    for ( int j = 0; j<png_image.get_height(); ++j )
+      
+	image[i*png_image.get_width() +j] = png_image[i][j].red;
+
+  
+  double* kep = (*p) (image);
+
+    for ( int i = 0; i<png_image.get_width(); ++i )
+    for ( int j = 0; j<png_image.get_height(); ++j )
+    png_image[i][j].red = kep[i*png_image.get_width()+j];
+
+  png_image.write("output.png");
+
+  delete p;
+  delete [] image;
+}
+                 
+]]>
+        </programlisting>
+        <para>Ez a main fájlunk. Ebben kellett egy kisebb változást alkalmazni.</para>
+        <programlisting language = "c">
+            <![CDATA[
+#include <iostream>
+#include "mlp.hpp"
+#include <png++/png.hpp>
+]]>
+        </programlisting>
+        <para>Ebben a részben hozzáadjuk a fájlhoz a szükséges könyvtárakat. A png++ könyvtár teszi lehetővé, hogy képállománnyal tudjuk dolgozni.</para>
+        <programlisting language="c"><![CDATA[
+int main ( int argc, char **argv )
+{
+  png::image <png::rgb_pixel> png_image ( argv[1] );
+
+  int size = png_image.get_width() *png_image.get_height();
+
+  Perceptron *p = new Perceptron ( 3, size, 256, 1);
+
+  double* image = new double[size];            
+  ]]>
+        </programlisting>
+        <para>Itt van a main függvényünk. Az első sorban meghatározzuk,hogy a képállományunk az
+            parancsori argumentum legyen. Ezután létrehozzuk a size int típusú változót. Ez a
+            változó lesz, amellyel kiszámoltatjuk a képnek a méretét és ebbe fogjuk tárolni az adott
+            méretet. Ezután példánosítjuk a Perceptron osztályt. Majd létrehozunk egy double
+            mutatót.</para>
+        <programlisting language="c"><![CDATA[
+  for ( int i = 0; i<png_image.get_width(); ++i )
+    for ( int j = 0; j<png_image.get_height(); ++j )
+      
+	image[i*png_image.get_width() +j] = png_image[i][j].red;
+
+        
+        
+        ]]>
+        
+        </programlisting>
+        <para>Itt ezután létrehozunk két for ciklust amelynek, a funkciója az, hogy a 2 ciklus
+            egyenként átmennek a kép magasságán, illetve a kép szélességén és ezt majd később az
+            imagebe fogja tárolni.  </para>
+        <programlisting language="c"><![CDATA[
+     double* kep = (*p) (image);
+
+    for ( int i = 0; i<png_image.get_width(); ++i )
+    for ( int j = 0; j<png_image.get_height(); ++j )
+    png_image[i][j].red = kep[i*png_image.get_width()+j];
+
+  png_image.write("output.png");
+
+  delete p;
+  delete [] image;
+ }
+            
+            
+            ]]>
+        </programlisting>
+        <para>Itt változtatunk igazán a programon, hiszen az image-al már nem értéket fog
+            visszaadni,hanem most már egy képet. Itt is double csillag típusra van szükség. Itt
+            ismét 2 for ciklus kell amely átmegy az eredeti képnek szélességén és magasságán és
+            ezeket az értékeket majd a kep be tároljuk. Ezután alkalmazzuk a write függvényt és
+            ezzel a tárolt adatok alapján egy új output.png-t létrehozunk. Ezzel még nem vagyunk
+            készek,hiszen az mlp fájlban át kell írni az operator függvénynek a visszatérítési
+            értékét,ugyan is már nem double-t kell visszatérítenie, hanem egy double mutatót kell.  
+	</para>
+    <programlisting language="c"><![CDATA[
+        // double operator() ( double image [] )
+         double* operator() ( double image [] ) ]]></programlisting>
+        <para>Így kellett változtani az mlp.hpp-n és ezek után már gond nélkül működik a programunk.
+            Íme a kép a programunkról:</para>
+        <mediaobject><imageobject><imagedata fileref="mandel.png"></imagedata></imageobject></mediaobject>
+        <para></para>
+        <mediaobject><imageobject><imagedata fileref="output.png"></imagedata></imageobject></mediaobject>
+        <para> Amint látható a másolás tökéletesen működött, a mandel és az output teljesen megegyezik. </para>
+    </section>
 </chapter>
+    
+
