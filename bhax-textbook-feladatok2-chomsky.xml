@@ -182,7 +182,7 @@ public class Fullscreen {
             van a feladatban az írányítás része. Az adott programcsipetetben látható a
             forgatásrésze. </para>
         
-        <programlisting language="cpp"> <![CDATA[
+        <programlisting language="c"> <![CDATA[
            void skeyboard ( int key, int x, int y )
 {
         if ( key == GLUT_KEY_UP ) {
@@ -218,13 +218,13 @@ public class Fullscreen {
             pirosnak a zöldnel és a kéknek felel meg. A számítása a következő : a választott
             értékeinket osztani kell 255-el és ezt a törtszámot kell nekünk megadni pl:
             aranysárgának az értékei : </para>
-        <programlisting language="cpp"> 
+        <programlisting language="c"> 
         <![CDATA[
           glColor3f ( .960f, .772f, .0031f );
         ]]>
         </programlisting>
         <para>Ebbe a kis programcsipetben található a "sima" fehéren hagyott négyzeteket. </para>
-        <programlisting language="cpp"> 
+        <programlisting language="c"> 
 <![CDATA[
         void drawPaRaCube ( int idx )
 {
