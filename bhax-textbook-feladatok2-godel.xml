@@ -1,0 +1,117 @@
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:lang="hu">
+    <info>
+        <title>Helló, Gödel</title>
+        <keywordset>
+            <keyword/>
+        </keywordset>
+    </info>
+    
+    
+    <section>
+        <title>Gengszterek</title>
+        
+        <para> Ebben a feladatban a robocar lambda kifejezésével ismerkedünk meg. A lambda
+            kifejezések olyan függvények ,amelyeket inlineoknak nevezhetünk. Ennek az a jelentősége,
+            hogy ezeket a függvényeket csak egyszer alkalmazunk az adott kódcsipetben. A szintaxisa
+            a következő: </para>
+        
+        <programlisting language="c"><![CDATA[
+[ bemeneti ág ] (paraméterek) -> visszatéritési érték  
+{   
+   metódus tartalma   
+}]]>
+        </programlisting>
+        
+        <para>Amit még érdemes tudni a lambda függvényekről, hogy ezekben a függvényekben a fordító
+            is megadhatja a visszatérítési értékeket. </para>
+        
+        <programlisting language="c">
+            <![CDATA[
+             std::sort ( gangsters.begin(), gangsters.end(), [this, cop] ( Gangster x, Gangster y )
+  {
+    return dst ( cop, x.to ) < dst ( cop, y.to );
+  } );
+            ]]>
+        </programlisting>
+        
+        <para>Ezt a részt kellett elemeznünk a feladatunkban. Amint láthatjuk,hogy a sort
+            függvényünknek 3 darab paramétere lesz. Az első két paraméternek a gansters.begin(() és
+            a gangser.end() az lesz a szerepe, hogy a teljes gangster vectort végigvizsgálja. A 3.
+            paraméter képezi a lambda függvényt. A bemeneti ágon kiválasztjuk a 2 változót ami a
+            this és a cop objektum.A lambda függvényünk paraméterként a Gangster x-et és a Gangster
+            y-t várja. Ez a két paraméter lesz összehasonlítva.</para>
+        
+        <programlisting language="c"><![CDATA[
+        return dst ( cop, x.to ) < dst ( cop, y.to );
+  }
+        
+            ]]>
+        </programlisting>
+        
+        <para>Itt azt adja vissza, hogy az x vagy az y van közelebb a cophoz. Abban az esetben,ha az
+            x közelebb akkor true értéket ad vissza.</para>
+    </section>
+    
+    <section>
+        <title>STL map érték szerinti rendezése</title>
+        <para> </para>
+    </section>
+    
+    <section>
+        <title>Alternatív Tabella</title>
+        <para> </para>
+    </section>
+    
+    <section>
+        
+        <title>GIMP Scheme hack</title>
+        
+        <para> Ebben a feladatban, Bátfai tanárúr GIMP-es példáját kellett alkalmaznunk. Ez a
+            feladat prog1-ben, volt viszont eddig még nem csináltam,ezért most fogom megcsinálni.
+        </para>
+        
+        <para>A feladat elkészítéséhez kellett alkalmazni a GIMP-et. Tanár úrnak a scriptjét
+            alkalmazzuk. A legfontosabb dolog, hogy a scriptet a megfelelő helyére helyezzük.
+            Egészen pontosan ide:</para>
+        
+        <programlisting language="c"><![CDATA[
+            /home/someusername/snap/gimp/227/.config/GIMP/2.10/scripts
+            ]]></programlisting>
+        
+        <para>Amint ha jól elhelyezzük a scriptet, azután a GIMP-ben alkalmazhatjuk. Ahhoz,hogy
+            láthassa a GIMP a projektet a szűrőkben a rendszerfájlokat frissíteni kell. Ezután újra
+            elindítjuk és ezután már létrehozhatjuk a saját mandalánkat. Itt lehet a kedvünkre
+            állítani, hogy mekkora legyen a kép mérete, milyen típusú legyen a szövegtípus, milyen
+            színű legyen a szöveg.   </para>
+        
+        <mediaobject><imageobject><imagedata fileref="mandala1.png"></imagedata></imageobject></mediaobject>
+        <para>És erre a beállításokra, ilyen mandalát kapunk vissza.</para>
+        <mediaobject><imageobject><imagedata fileref="mandala2.png"></imagedata></imageobject></mediaobject>
+        
+        <programlisting language="c"><![CDATA[
+            (script-fu-register "script-fu-bhax-mandala"
+    "Mandala9"
+    "Creates a mandala from a text box."
+    "Norbert Bátfai"
+    "Copyright 2019, Norbert Bátfai"
+    "January 9, 2019"
+    ""
+    SF-STRING       "Text"      "Bátf41 Haxor"
+    SF-STRING       "Text2"     "BHAX"
+    SF-FONT         "Font"      "Sans"
+    SF-ADJUSTMENT   "Font size" '(100 1 1000 1 10 0 1)
+    SF-VALUE        "Width"     "500"
+    SF-VALUE        "Height"    "500"
+    SF-COLOR        "Color"     '(212 145 0)
+    SF-GRADIENT     "Gradient"  "Deep Sea"
+            
+            ]]></programlisting>
+        
+        <para> A fájlban itt található meg az alapbeállítások. Abban az esetben ha nem akarunk már
+            változtani a projekten, akkor érdemes a forrásban átírni ezeket az adatokat,hiszen
+            ilyenkor már csak a mandala létrehozása lenne hátra. </para>
+    
+    </section>
+
+</chapter>
