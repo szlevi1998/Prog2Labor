@@ -55,12 +55,140 @@
     
     <section>
         <title>STL map érték szerinti rendezése</title>
-        <para> </para>
+        <para> Ebben a feladatcsokorban a mappekkel is kellett foglalkoznunk és az volt a
+            feladatunk, hogy c++-ban olyan programot írjunk amellyel a mapben ne a kulcs alapján
+            rendezzünk, hanem érték alapján. A feladatban az idei F1-es csapatok pontszerzéseit
+            rendeztem. Itt a kód:</para>
+        <programlisting language="c"><![CDATA[
+            #include <iostream>
+#include <map>
+#include <set>
+#include <functional>
+
+int main()
+{
+std::map <std::string, int >  Championship = { { "Ferrari", 479} , {"Williams", 1}, { "Red Bull", 366}, {"AlfaRomeo", 35}, {"Mclaren", 121}, {"RacingPoint", 65}, { "Mercedes", 695} , {"ToroRosso", 64}, {"Haas", 28},{"Renault", 83} };
+
+typedef std::function<bool(std::pair<std::string, int>, std::pair<std::string, int>)>Compare;
+
+Compare lambdafugg =
+	[](std::pair<std::string, int> point1, std::pair<std::string, int> point2)
+	{
+	return point1.second > point2.second;
+	};
+
+
+	std::set<std::pair<std::string, int>, Compare> sorted(
+		Championship.begin(), Championship.end(), lambdafugg);
+
+	for (std::pair<std::string, int> element : sorted){
+
+	std::cout << "Team name : "  << element.first << "\t" << " Points scored : "  << element.second << std::endl;
+	}
+	return 0;
+}]]>
+        
+        </programlisting>
+        <para>Elemezzük ki a kódot</para>
+        <programlisting language="c"><![CDATA[
+#include <iostream>
+#include <map>
+#include <set>
+#include <functional>
+
+int main()
+{
+std::map <std::string, int >  Championship = { { "Ferrari", 479} , {"Williams", 1}, { "Red Bull", 366}, {"AlfaRomeo", 35}, {"Mclaren", 121}, {"RacingPoint", 65}, { "Mercedes", 695} , {"ToroRosso", 64}, {"Haas", 28},{"Renault", 83} };
+
+typedef std::function<bool(std::pair<std::string, int>, std::pair<std::string, int>)>Compare;
+ 
+            ]]></programlisting>
+        <para>Amint láthatjuk, nem kevés header fileokat kell alkalmazni. A mapre azért van
+            szükségünk,mert először is ez volt a feladat alappillére, illetve azért is mert Mappel
+            tudunk érték-pár változókat létrehozni. A setre és a functionalre később van szükségem.
+            A mainben létrehozzuk a Mapet amelyben egy string és egy int páros van. Mapet elnevezzük
+            Championshipre és ezután feltöltöm a mapet a csapatok nevével és a hozzátartozó
+            pontokat.  Ezután egy típust definiálunk amelynek az a lényege, hogy 2 párt fogad be és
+            ez visszaad egy bool értéket amelyet  a Comparbe tárol.  </para>
+        <programlisting language="c"><![CDATA[
+            Compare lambdafugg =
+	[](std::pair<std::string, int> point1, std::pair<std::string, int> point2)
+	{
+	return point1.second > point2.second;
+	};
+            
+            
+            ]]></programlisting>
+        <para>Ezután létrehozok egy lambdafüggvényt,és ebben a függvényben vizsgálunk 2 elemet.
+            Ezután visszaadunk egy igaz vagy hamis értéket.</para>
+        
+        <programlisting language="c"><![CDATA[
+ std::set<std::pair<std::string, int>, Compare> sorted(
+Championship.begin(), Championship.end(), lambdafugg);
+            
+            ]]>
+            
+        </programlisting>
+        <para>Itt a seten belül történik a rendeződés. A setben meghatározzuk azt hogy melyik
+            osztályt rendezzük.</para>
+        <programlisting language="c"><![CDATA[
+            for (std::pair<std::string, int> element : sorted){
+
+	std::cout << "Team name : "  << element.first << "\t" << " Points scored : "  << element.second << std::endl;
+	}
+	return 0;
+
+            ]]></programlisting>
+        <para>Ezután a for ciklussal kiírom a csapatok nevét és a csapatok pontszámát.  </para>
+        <mediaobject><imageobject><imagedata fileref="mapping.png"></imagedata></imageobject></mediaobject>
+        <para>Abban az esetben ha csökkenőre szeretnénk állítani az értékeket akkor egy apró módosításon kell túllépni.</para>
+    <programlisting language="c"><![CDATA[
+        
+        return point1.second < point2.second;
+        ]]></programlisting>
+        <para> Amint változtatunk a relációjelen a sorrendünk megváltozik. </para>
+        <mediaobject><imageobject><imagedata fileref="mapping2.png"></imagedata></imageobject></mediaobject>
+        
     </section>
     
     <section>
         <title>Alternatív Tabella</title>
-        <para> </para>
+        <para> Ebben a feladatban az alternatív tabellával foglalkozunk. Az alternatív egy olyan
+            tabella, amely a csapatok a valós erősorrendjét mutatja meg. Ennek az a lényege, hogy
+            megnézi milyen csapatok ellen érte el az adott eredményt. Ez az értékelés arra jó, hogy
+            megmutassa hogy 3 győzelem a 3 leggyengébb csapata ellen, nem olyan nagy teljesítmény
+            mint, ha a 3 győzelem a 3 legerősebb csapat ellen. Egy sima tabellában mindkét esetben 9
+            pontot ér, de ezzel az algoritmussal megtudjuk különböztetni a csapatok valós
+            teljesítményét.    </para>
+        <programlisting language="c"><![CDATA[
+class Csapat implements Comparable<Csapat> {
+
+  protected String nev;
+  protected double ertek;
+
+  public Csapat(String nev, double ertek) {
+    this.nev = nev;
+    this.ertek = ertek;
+  }
+
+  public int compareTo(Csapat csapat) {
+    if (this.ertek < csapat.ertek) {
+      return -1;
+    } else if (this.ertek > csapat.ertek) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }            
+            
+            ]]></programlisting>
+        <para>Ezt a kódcsipetet kellett elemeznünk és azon belül a Comparable interfésszel. Először
+            is létrehozunk egy csapat osztályt. Ezután a csapat osztály implementálja a Comparable
+            interfészt. Ezután megvizsgáljuk,hogy vajon összehasonlítható két csapat. Objektumot
+            haasonlítünk össze az átvett objektummal. 3 lehetőségünk van, vagy -1, 1 vagy 0
+            lehetséges. Ez azt jelenti, hogyha -1 az érték akkor az objektum nagyobb mint az átvett
+            az érték. Ha 1 az érték akkor az objektum kisebb mint az átvett érték és végül, ha 0
+            akkor a két objektum értéke megegyezik.</para>
     </section>
     
     <section>
