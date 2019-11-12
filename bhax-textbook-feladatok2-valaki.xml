@@ -1,0 +1,265 @@
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:lang="hu">
+    <info>
+        <title>Helló,Valaki!</title>
+        <keywordset>
+            <keyword/>
+        </keywordset>
+    </info>
+   <section>
+       <title>FUTURE tevékenység editor</title>
+       <para>Mielőtt a feladathoz térnénk, fontos kiemelni, hogy a program megfelelően működhessen,
+            szükségünk van egy jó JDK verzióhoz és egy JavaFX verzióhoz. Enélkül az eredeti program
+            100 hibával fog kilépni. Ahhoz, hogy feltelepítsük a JavaFX-t ezt a parancsot kell
+            alkalmaznunk.</para>
+       <programlisting language="c"><![CDATA[sudo apt install openjdk-8-jdk openjfx]]></programlisting>
+       <para>Valamint én még a JDK-t is defaultra változtattam, igazából nem tudom,hogy szükséges
+            volt ahhoz, hogy működjön,mert nem tudtam, hogy milyen JDK volt alapból a
+            rendszeremen,de inkább biztosra mentem. A JDK frissítéséhzez az alábbira parancsra van
+            szükségünk.</para>
+       <programlisting language="c"><![CDATA[sudo apt-get install default-jdk]]></programlisting>
+       <para>Feladatunk az volt, hogy a Future Activity Editorba javítsunk valami féle hibát,
+            illetve keressünk benne bugot. Nem kellett sok idő, ahhoz hogy bugot találjunk.
+            Legegyszerűbben megtalálható bug az volt, hogy egy adott fa elemhez nem lehet egyszerre
+            több altevékenységet hozzárendelni. Itt láthatjuk a képen is.  </para>
+       <mediaobject><imageobject><imagedata fileref="Activity.png"></imagedata></imageobject></mediaobject>
+       <para>Nézzük is a kódot.</para>
+       <programlisting language="c"><![CDATA[
+
+                java.io.File f = new java.io.File(file.getPath() + System.getProperty("file.separator") + "Új altevékenység");
+
+                if (f.mkdir()) {
+                    javafx.scene.control.TreeItem<java.io.File> newAct
+ //                           = new javafx.scene.control.TreeItem<java.io.File>(f, new javafx.scene.image.ImageView(actIcon));
+                           = new FileTreeItem(f, new javafx.scene.image.ImageView(actIcon));                            
+                    getTreeItem().getChildren().add(newAct);
+                } else {
+
+                    System.err.println("Cannot create " + f.getPath());
+
+                }
+            });
+           ]]></programlisting>
+       <para>Ebben a kódcsipetben tudunk létrehozni altevékenységeket. Ezzel az a probléma, mint
+            említettem, hogy egy adott altevékenység csak 1 altevékenységet lehet létrehozni, többet
+            nem lehetséges. Viszont, ha kicsit módosítunk a kódon, akkor ki lehet küszöbölni ezt.
+            Itt az alábbi módosítások. </para>
+       <programlisting language="c"><![CDATA[int i = 1;
+		while(true) {
+        java.io.File f = new java.io.File(file.getPath() + System.getProperty("file.separator") + "Új altevékenység" + i);
+
+         if (f.mkdir()) {
+         javafx.scene.control.TreeItem<java.io.File> newAct
+ //       = new javafx.scene.control.TreeItem<java.io.File>(f, new javafx.scene.image.ImageView(actIcon));
+          = new FileTreeItem(f, new javafx.scene.image.ImageView(actIcon));                            
+         getTreeItem().getChildren().add(newAct);
+		break;
+        } else {
+		    ++i;
+                    System.err.println("Cannot create " + f.getPath());
+			}
+                }
+            });
+           ]]></programlisting>
+       <para>Itt létrehozok egy i változót és ezután létrehozok egy while ciklust. A white ciklusban
+            a paraméterben egy true-t adok meg ezzel végtelen ciklust hozok létre. Ebbe a végtelen
+            ciklusba helyezzük az altevékenység létrehozó részét. Az ifben megnézzük hogy létezik
+            már ilyen altevékenység abban az esetben ha nincs akkor létrehozunk egy újat, ha van
+            akkor az if függvényünket breakeljük (megszakítjuk). Fontos, hogy a break benne legyen
+            ebben a ciklusba, hiszen ha nem teszünk, akkor egészen biztosan megfagyasztjuk a
+            programunkat és eléggé esélyes az is,hogy a gépünk is lefagyhat. Ha van ilyen mappánk
+            akkor növeljük az i változónkat és kiíratjuk, hogy nem sikerült ilyen fájlt
+            létrehoznunk.  A programról egy kép: </para>
+       
+       <mediaobject><imageobject><imagedata fileref="altevekenyseg2.png"></imagedata></imageobject></mediaobject>
+       
+   </section>
+    
+    <section>
+        <title>SamuCam</title>
+        <para>Ebben a feladatban az volt a feladatunk, hogy SamuCam-et felélesszük és rámutassunk a
+            webcam kezelésére. A felélesztés egy kicsit idegesítő procedúra volt, hiszen abban a
+            tudatban voltam, hogy minden könyvtáram valid és rendben van azonban csak később jöttem
+            rá, hogy a Samucam header fájlában includeolt könyvtárak már nem frissek. Eredetileg így
+            nézett ki.</para>
+        <programlisting language="c"><![CDATA[
+#include "opencv2/objdetect.hpp"
+#include "opencv2/core.hpp"
+#include "opencv2/highgui.hpp"
+#include "opencv2/imgproc.hpp"
+]]></programlisting>
+        <programlisting language="c"><![CDATA[
+#include "opencv2/objdetect/objdetect.hpp"
+#include "opencv2/core/core.hpp"
+#include "opencv2/highgui/highgui.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
+]]></programlisting>
+        <para>Így néz ki helyesen a könyvár szerkezete, így működik megfelelően. </para>
+        <programlisting language="c"><![CDATA[
+#include "SamuCam.h"
+
+SamuCam::SamuCam ( std::string videoStream, int width = 176, int height = 144 )
+  : videoStream ( videoStream ), width ( width ), height ( height )
+           ]]>
+        </programlisting>
+        <para>Includeoljuk a SamuCam.h headerbe. Itt megadjuk az IP cím által használt kamerának a
+            videóstreamnek a szélességet és magasságot. </para>
+        <programlisting language="c"><![CDATA[
+{
+  openVideoStream();
+}
+
+SamuCam::~SamuCam ()
+{
+}
+
+void SamuCam::openVideoStream()
+{
+  videoCapture.open (0);
+
+  videoCapture.set ( CV_CAP_PROP_FRAME_WIDTH, width );
+  videoCapture.set ( CV_CAP_PROP_FRAME_HEIGHT, height );
+  videoCapture.set ( CV_CAP_PROP_FPS, 30 );]]>
+        </programlisting>
+        <para>VideoCapture.open metódusba megadjuk az argumentumba egy 0-ás számot amely egy ID
+            számot takar és ez az ID szám videocapture a webcam-re mutatott. Ezután a settel
+            beállítjuk a szélességét a magasságát és a FPS-nek a számát.</para>
+        <programlisting language="c"><![CDATA[
+{
+
+  cv::CascadeClassifier faceClassifier;
+
+  std::string faceXML = "lbpcascade_frontalface.xml"; // https://github.com/Itseez/opencv/tree/master/data/lbpcascades
+
+  if ( !faceClassifier.load ( faceXML ) )
+    {
+      qDebug() << "error: cannot found" << faceXML.c_str();
+      return;
+    }            ]]>
+        </programlisting>
+        <para>Ezután a CascadeClassifert objektumot példányosítjuk. Ezután beolvassuk az
+            lbpcascade_frontalface.xml-t. Classifer arra alkalmassa hogy az arc képünket tudja
+            elemezni. A load metódussal olvassuk be az arcot. Akkor,ha nem tudja beolvasni akkor
+            hibát ad vissza a program. </para>
+        <programlisting language="c"><![CDATA[
+  cv::Mat frame;
+
+  while ( videoCapture.isOpened() )
+    {
+
+      QThread::msleep ( 50 );
+      while ( videoCapture.read ( frame ) )
+        {
+
+          if ( !frame.empty() )
+            {
+
+              cv::resize ( frame, frame, cv::Size ( 176, 144 ), 0, 0, cv::INTER_CUBIC );
+
+              std::vector<cv::Rect> faces;
+              cv::Mat grayFrame;
+
+              cv::cvtColor ( frame, grayFrame, cv::COLOR_BGR2GRAY );
+              cv::equalizeHist ( grayFrame, grayFrame );
+
+              faceClassifier.detectMultiScale ( grayFrame, faces, 1.1, 3, 0, cv::Size ( 60, 60 ) );
+
+              if ( faces.size() > 0 )
+                {
+
+                  cv::Mat onlyFace = frame ( faces[0] ).clone();
+
+                  QImage* face = new QImage ( onlyFace.data,
+                                              onlyFace.cols,
+                                              onlyFace.rows,
+                                              onlyFace.step,
+                                              QImage::Format_RGB888 );
+
+                  cv::Point x ( faces[0].x-1, faces[0].y-1 );
+                  cv::Point y ( faces[0].x + faces[0].width+2, faces[0].y + faces[0].height+2 );
+                  cv::rectangle ( frame, x, y, cv::Scalar ( 240, 230, 200 ) );
+
+
+                  emit  faceChanged ( face );
+                }
+
+              QImage*  webcam = new QImage ( frame.data,
+                                             frame.cols,
+                                             frame.rows,
+                                             frame.step,
+                                             QImage::Format_RGB888 );
+
+              emit  webcamChanged ( webcam );
+
+            }
+
+          QThread::msleep ( 80 );
+
+        }
+
+      if ( ! videoCapture.isOpened() )
+        {
+          openVideoStream();
+        }
+
+    }
+            ]]></programlisting>
+        <para>Ebben a kódcsipetben 2 while ciklust alkalmazunk. Létrehozunk egy frame változót amely
+            egy tömb. Egy if függvény paraméretében vizsgáljuk,hogy a frame üres vagy nem. Ha a
+            frame nem üres akkor átméretezzük a képet. CvtColorral átszínezzük a képünket szürkésre
+            és equalizeHisttel pedig kiegyenlítjük a hisztogramot. Majd ezután a
+            detectMultiScalellel a képeket elmentjük a facesbe. Ha találunk képet akkor létrehoz egy
+            QImaget és ezt a SamuBrainnek továbbítja amely később feldolgozza. Ezután 80
+            milliszekundum után visszatérünk a while cikklus elejére.</para>
+        <mediaobject><imageobject><imagedata fileref="Samucam.png"></imagedata></imageobject></mediaobject>
+        <para>Először IP alapján próbáltam működtettni, majd később a videocapture.open(0)-ra
+            állítottam és amint látható a program működik. </para>
+    </section>
+    
+    <section>
+        <title>BrainB</title>
+        <para>Ebben a feladatban az volt a feladatunk, hogy a Brain B ismertessük a QT-nek a Slot-
+            Signal mechanizmusát. Mielőtt a feladathoz térnénk, fontos ismertetni azt, hogy mi is a
+            slot signal mechanizmus, mire használjuk. Ahhoz, hogy megértsem, ezt a mechanizmust a
+            QT-nek a dokumentációját kellett értelmeznem. A QT-nek a dokumentációját itt találtam :
+                <link xlink:href="https://doc.qt.io/qt-5/signalsandslots.html"/>
+        </para>
+       <para>Először is Signalokat és a slotokat arra használjuk, hogy az objektumokat között
+            kommunikálhassunk. A Qt-nek ez a legfőbb mechanizmusa. A QT-ben egy signal akkor van
+            aktiválva amikor egy bizonyos esemény történik. Qt-nek vannak előre definiált signaljai,
+            viszont alkalmazhatunk alosztály moduljait amit hozzáadhatunk a saját signaljainkhoz. A
+            slot egy függvény amely válaszként hívódik meg egy bizonyos signal alapján. </para>
+        <para>A QT signalok és slotoknak a mechanizmusa  biztosítja azt, ha egy signalt kapcsolunk
+            egy slothoz akkor a megfelelő időben a slot meghívódik a signal paramétereivel. A
+            signalok és a slotoknak bármilyen számokat és bármilyen típust képes elfogadni az
+            argumentumában . Ezért ezek a típusok biztonságosak.  </para>
+        <para>Minden osztály ami orököl az QObjectből vagy egy bizonyos subclassnak pl QWidgete
+            tartalmazza signalokat és a slotokat. Signalok akkor hívódnak meg objektumoktól, ha
+            valamikor megváltozik az állapotuk egy olyan mértékben amely már a többi objektumot is
+            befolyásolhatja. Az objektumok csak kommunikálnak. Nem tudja vagy nem érdekli az, ha
+            valamilyen signalt fogad akkor azt tovább sugározza. Ez teljes információs
+            egyedbefogalalás és biztosítja, hogy egy objektumot használhatunk akár egy szoftveres
+            komponensnek.</para> 
+            <para>Slotokat mint említettük használhatjuk hogy signalokat fogadjunk, de ezek lehetnek
+            csak sima függvények. Egy slothoz több signalt kapcsolhatunk és egy signalt több slothoz
+            is kapcsolhatunk. Az is lehetséges hogy egy signalt egy másik signalhoz kapcsolunk. A
+            signalok és a slotok együttesen egy nagyon erős programozói mechanizmust alkot. a
+            feladatról. </para>
+        <para>Brain B-ben alkalmazzuk a BrainWin.cpp-ben. Signalokat a slotokkal egy connect
+            függvénnyel kapcsoljuk össze. Első signal függvénynél megadjuk hogy a heroesChangedet. A
+            függvényben azt adjuk meg hogy milyen paramétereket várunk a heroeschangedtől majd ezt
+            továbbítjuk a slothoz és majd megadjum hogy fusson le az updatehereos függvény. A
+            második is hasonlóan működik csak ott kevesebb paramétert használunk. Az első függvény
+            akkor fut le, ha a Brain B-ben az indulástól számítva 10  perc letelik. A második
+            függvény pedig folyamatosan fut és az arra van, hogy az entropik frissüljenek. </para>
+        <programlisting language="c"><![CDATA[
+connect ( brainBThread, SIGNAL ( heroesChanged ( QImage, int, int ) ),
+                  this, SLOT ( updateHeroes ( QImage, int, int ) ) );
+
+        connect ( brainBThread, SIGNAL ( endAndStats ( int ) ),
+                  this, SLOT ( endAndStats ( int ) ) );
+            ]]></programlisting>
+        <programlisting language="c"><![CDATA[
+            ]]></programlisting>
+    </section>
+       
+</chapter>      
