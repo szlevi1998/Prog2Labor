@@ -1,0 +1,199 @@
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:lang="hu">
+    <info>
+        <title>Helló, Gödel</title>
+        <keywordset>
+            <keyword/>
+        </keywordset>
+    </info>
+    
+    <section><title>Port Scan</title>
+    <para>Ebben a feladatban egy olyan programot néztünk, amelyben portokat vizsgáltunk. Itt Java
+            socketekkel dolgozunk. A socket egy végpont a kommunikációban két gép között. A
+            socketnek a dolgát SocketImpl osztálynak példánya végzi. Egy alkalmazás amely
+            változatunk az létrehoz egy socket implementációt. Ez a socket implementáció magától
+            létrehozhat további socketeket amelyek megfelelőek a helyi tűzfalnak.  Amint látható for
+            ciklusban végezzük a vizsgálatot.</para>
+        <programlisting language="c"><![CDATA[
+        public class KapuSzkenner {
+    
+    public static void main(String[] args) {
+        
+        for(int i=0; i<1024; ++i)
+            
+            try {
+                
+                java.net.Socket socket = new java.net.Socket(args[0], i);
+                
+                System.out.println(i + " figyeli");
+                
+                socket.close();
+                
+            } catch (Exception e) {
+                
+                System.out.println(i + " nem figyeli");
+                
+            }
+    }
+    
+}
+        ]]></programlisting>
+    <para>
+            Minden egyes portot vizsgáljuk és, ha az
+            adott portot vizsgálja akkor kiírja a program, hogy ezt a portot figyeli. Akkor, ha nem
+            figyeli akkor a függvényt kivételt kezel és ki írja hogy nem figyeli. Ahhoz, hogy ez
+            működjön fontos, hogy a terminálba a paraméternek a localhostot kell adni. A
+            következőképpen:  </para>
+        <programlisting language="c"><![CDATA[
+            java KapuSzkenner localhost
+            ]]></programlisting>
+        <para>Itt adjuk meg a futtatásnak a módját. Amint lehet látni a localhostot adjuk meg és 1 portot figyel míg az összes többit nem figyelte.</para>
+        <mediaobject><imageobject><imagedata fileref="figyeli.png"></imagedata></imageobject></mediaobject>
+
+    </section>
+    <section><title>Android Játék</title>
+    <para>Ebben a feladatban Androidos játékot kellett készítenünk. Tavalyi Prog 2-ben ugyanezt
+            feladatot megoldottam úgy, hogy csak átmentettem a tavalyi példámat. Ezt a feladatot
+            Learn the Java Easy Way könyvből vettem át illetve módosítottam egy kicsit a kódon is.  </para>
+    <para>A feladat lényege azt volt, hogy egy adott számot kellett kitalálni 1 és 100 között.
+            Akkor,ha szám alacsonyabb akkor a program kiírja, hogy adjunk egy nagyobb számot,
+            illetve ez természetesen fordítva is működik. Ha eltaláljuk a számot akkor a program
+            lefut és ad egy "gratulációs üzenetet." </para>
+        <programlisting>import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.Button;
+import android.widget.TextView;
+import org.w3c.dom.Text;
+public class MainActivity extends AppCompatActivity {
+private EditText txtGuess;
+private Button btnGuess;
+private TextView lblOutput;
+private int theNumber;
+public void checkGuess() {
+String guessText = txtGuess.getText().toString();
+String message = "";
+try {
+int guess = Integer.parseInt(guessText);
+if (guess &lt; theNumber)
+message = guess + " is too low. Try again.";
+else if (guess > theNumber)
+message = guess + " is too high. Try again.";
+else {
+message = guess +
+" is correct. You win! Let's play again!";
+newGame();
+} 
+} catch (Exception e) {
+message = "Enter a whole number between 1 and 100.";
+} finally {
+lblOutput.setText(message);
+txtGuess.requestFocus();
+txtGuess.selectAll();
+}
+}
+public void newGame() {
+theNumber = (int)(Math.random() * 100 + 1);
+}
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+super.onCreate(savedInstanceState);
+setContentView(R.layout.activity_main);
+txtGuess = (EditText) findViewById(R.id.txtGuess);
+btnGuess = (Button) findViewById(R.id.btnGuess);
+lblOutput = (TextView) findViewById(R.id.lblOutput);
+newGame();
+btnGuess.setOnClickListener(new View.OnClickListener() {
+@Override
+public void onClick(View v) {
+checkGuess();
+}
+});
+Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+setSupportActionBar(toolbar);
+}
+}</programlisting>
+        <para>Pár képen látható a program működése.</para>
+        <mediaobject><imageobject><imagedata fileref="guess1.png"></imagedata></imageobject></mediaobject>
+        <mediaobject><imageobject><imagedata fileref="guess2.png"></imagedata></imageobject></mediaobject>
+        <mediaobject><imageobject><imagedata fileref="guess3.png"></imagedata></imageobject></mediaobject>
+        <mediaobject><imageobject><imagedata fileref="guess4.png"></imagedata></imageobject></mediaobject>
+    </section>
+    <section><title>Junit Test</title>
+    <para>Ebben a feladatban el kellett készítenünk a binfának a számítasait. Beleértve a fa
+            mélységét,átlagát és a szórását. Kellett egy kis idő, hogy megértsem a binfának
+            algoritmusát, de miután ez megvolt teljesen világossá vált minden ebben a témában. </para>
+        <programlisting language="c"><![CDATA[
+            01001101 01000011]]></programlisting>
+        <para>Ez a kódsorozat MC -nek felel meg bináris alakban. Ahogy a feladat megkövetelte,
+            először lapon oldottam meg. Itt látható képen.  </para>
+        <mediaobject><imageobject><imagedata fileref="Binfa.png"/></imageobject></mediaobject>
+        <para>Amint látható a bináris sorban szétválasztom azokat az elemeket amelyek eddig nem
+            voltak jelen. Ilyen a 0 az 1 és így tovább. Amelyek már megjelentek azokat, már nem
+            veszem figyelembe, olvasom tovább a többi elemmel együtt. Vannak olyan eshetőségek,hogy
+            például a 11 a végén már nem is kell figyelembe venni,hiszen már ezelőtt már ki volt
+            emelve. </para>
+        <para>Ezután az elemeket egy fa struktúrában felírtam. Itt látszódnak az elágazások és ebből
+            lehet megítélni hogy mi is a fa mélysége. A fa mélységének az értékét pedig azt adja,
+            hogy 0-nak vagy 1-nek melyik a legutolsó eleme. Itt jelen esetben a 000 és a 010 a
+            legmélyebben szereplő elem.</para>
+        <para>Átlagot úgy kapjuk meg, hogy az elágazások legmélyebb elemeinek a mélység értékeit
+            összeadjuk és ahány elem van annyival osztjuk ezt az adott értéket. Itt a 000-nak és a
+            010-nak 3 a mélysége és emelett van még a 11 amelynek a mélysége a 2. Ezeknek az
+            elemeknek az értékeit összeadjuk és elosztjuk 3-al jelen esetben. Így kapjuk meg a fának
+            az átlagát,ami itt 8/3 vagy 2.66. </para>
+        <para>Ezután megnézzük a szórását. A szórás már egy jóval komplikáltabb számítás,amelyet
+            igazából nem szeretnék nagyon részletezni. Annyit kell tudni a fa elágazások mélységét
+            ki kell vonni az átlagból és ezeknek az értékeit vesszük a négyzetét. Ezek után a
+            szorozzuk az 1/ mélység-1 értékkel, ami itt jelen esetben 1/2. Ezzel a számmal szorozzuk
+            az eddigi négyzeteknek összegeit. Majd ezek után ennek vesszük a négyzetgyökét. Amint
+            látható ez már egy sokkal bonyolúltabb számítási módszer,de az érték nagyjából teljesen
+            megegyezett. Gondolom azért van egy kisebb eltérés mert én szimplán 2,66-al számoltam,
+            míg a gép sokkal több 6-al számolt(itt 2.666667 körüli számra gondolok). </para>
+        <mediaobject><imageobject><imagedata fileref="z3a7.png"/></imageobject></mediaobject>
+        <para>Ezen a képen látható az ellenőrzés a z3a7.cpp-vel a Tanár Úr binfájával. Amint látható
+            a mélység és az átlag teljesen megegyezik, míg a szórás mint említettem egy kicsit
+            különbözik.</para>
+        <para>Ez volt a feladat elméleti része a 2.része az volt,hogy a binfának a számolási
+            függvényeit JUnittal ellenőrízzem. A feladatot eclipseben próbáltam elkészíteni, hiszen
+            az eclipseben vannak beépített JUnite tesztelők. Elsődleges feladat az volt, hogy a
+            Javas binfát alkalmazzam és azt olvassa be. Miután megadtam neki a Binfás fájlomat, ki
+            kellett választani, hogy milyen függvényeket és metódusokat teszteljen a JUnit. Mivel
+            csak a szórást az átlagot és a mélységet kellett tesztelni ezért elég ezt a 3 metódust
+            kiválasztani. Ezután automatikusan kreált egy JUnit-os a fájlt és ebben kellett egy pár
+            dolgot átírnunk a fájlban. Íme a kód:  </para>
+        <programlisting language="c"><![CDATA[
+            import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
+
+class LZWBinFaTest {
+	LZWBinFa binfa = new LZWBinFa();
+
+	@Test
+	void test() {
+		for (char c : "0100110101000011".toCharArray())
+			binfa.egyBitFeldolg(c);
+		
+		org.junit.Assert.assertEquals(3, binfa.getMelyseg(), 0.0);
+		org.junit.Assert.assertEquals(2.66667, binfa.getAtlag(), 0.001);
+		org.junit.Assert.assertEquals(0.57735, binfa.getSzoras(), 0.0001);
+}
+}
+            ]]></programlisting>
+       <para>Amint látható először is példányosítottuk az LZWBinfát. Majd a teszt függvényben for
+            ciklussal az összes 0 1 karaktert egy karaktertömbbé alakítjuk. Ezután az Assertben
+            összevetjük az adatokat.Az assert függvényben van 3 paraméter az első érték amelyet
+            kaptunk a 2. érték a binfa értéke a 3.pedig az eltérésnek az összegét adtuk meg. Abban
+            az esetben ha valami hiba van akor a JUnit test sikertelen,de amint látható a képen a
+            testünk sikeres volt.  </para>
+        <mediaobject><imageobject><imagedata fileref="JUnit.png"/></imageobject></mediaobject>
+    </section>
+    
+    
+</chapter>
