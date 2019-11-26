@@ -132,7 +132,7 @@ setSupportActionBar(toolbar);
             01001101 01000011]]></programlisting>
         <para>Ez a kódsorozat MC -nek felel meg bináris alakban. Ahogy a feladat megkövetelte,
             először lapon oldottam meg. Itt látható képen.  </para>
-        <mediaobject><imageobject><imagedata fileref="Binfa.png"/></imageobject></mediaobject>
+        <mediaobject><imageobject><imagedata fileref="binfa.png"/></imageobject></mediaobject>
         <para>Amint látható a bináris sorban szétválasztom azokat az elemeket amelyek eddig nem
             voltak jelen. Ilyen a 0 az 1 és így tovább. Amelyek már megjelentek azokat, már nem
             veszem figyelembe, olvasom tovább a többi elemmel együtt. Vannak olyan eshetőségek,hogy

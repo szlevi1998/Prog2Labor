@@ -1,0 +1,287 @@
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:lang="hu">
+    <info>
+        <title>Helló, Gödel</title>
+        <keywordset>
+            <keyword/>
+        </keywordset>
+    </info>
+    <section><title>MNIST</title>
+        <para>Feladatunk az volt, hogy az MNIST-es példát megoljduk illetve saját példát is
+            felismerhessen. Az MNIST egy olyan adatbázis, amelyben olyan szimbólumok vannak tárolva
+            amelyek "kézírásosak". Közel 60 ezer tanulási és 10 ezer tesztelési példával
+            rendelkezik.Az első 5 ezer példát az eredeti NIST tanulási setből származik.</para>
+        <para>Az első dolog az, hogy megfelelő könyvtárakkal és megfelelő verziójú python és
+            tensorflow-val rendelkezzünk. Eléggé nehéz volt, hogy kompatibilis legyen a
+            rendszerünkkel. Szükségünk van a pip3-ra amellyel tudjuk a pythont frissíteni. Az alábbi
+            parancsokkal sikerült frissíteni: </para>
+        <programlisting language="c"><![CDATA[
+    sudo -H pip3 install --upgrade pip
+    sudo -H apt install python3-dev python3-pip
+            
+            ]]></programlisting>
+        <para>Fontos beletenni -H kapcsoló mert enélkül nem veszi a saját useremet a telepítésnél.
+            Valamint fontos volt az is, hogy a TensorFlowot downgradeljük. Ugyanis valamilyen oknál
+            fogva 2.0-ás verziót nem szereti a program. A következő paranccsal tudjuk a
+            Tensorflow-nak az 1.2.0-ás verzióját alkalmazni.
+        </para>
+        <programlisting language="c"><![CDATA[
+            pip3 install --user tensorflow==1.2.0 --ignore-installed
+            ]]></programlisting>
+        <para>Valamint a program felajánlott egy hiányos könyvtárt,amely nem tudom, hogy meghatározó vagy nem de én ezt is alkalmaztam.</para>
+        <programlisting language="c"><![CDATA[
+            sudo apt install python3-tk
+            
+            ]]></programlisting>
+        <para>Emelett alkalmaztuk a matplotlibet amely szintén fontos könyvtár a programunkhoz. A következő könyvtárat így kell telepíteni.</para>
+        <programlisting language="c"><![CDATA[
+python -m pip install -U matplotlib            
+            ]]></programlisting>
+        <para>A feladatunk az volt,hogy Tanár Úr-nak a 3. példáját kellett feléleszteni,illetve
+            saját példát ismerjen fel. Lássuk is a kódot:</para>
+        <programlisting language="c"><![CDATA[ Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ==============================================================================
+
+# Norbert Batfai, 27 Nov 2016
+# Some modifications and additions to the original code:
+# https://github.com/tensorflow/tensorflow/blob/r0.11/tensorflow/examples/tutorials/mnist/mnist_softmax.py
+# See also http://progpater.blog.hu/2016/11/13/hello_samu_a_tensorflow-bol
+# ==============================================================================
+
+"""A very simple MNIST classifier.
+
+See extensive documentation at
+http://tensorflow.org/tutorials/mnist/beginners/index.md
+"""
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+
+import argparse
+
+# Import data
+from tensorflow.examples.tutorials.mnist import input_data
+
+import tensorflow as tf
+
+import matplotlib.pyplot
+
+
+FLAGS = None
+
+
+def readimg():
+    file = tf.read_file("eight.png")
+    img = tf.image.decode_png(file, 1)
+    return img
+
+def main(_):
+  mnist = input_data.read_data_sets(FLAGS.data_dir, one_hot=True)
+
+  # Create the model
+  x = tf.placeholder(tf.float32, [None, 784])
+  W = tf.Variable(tf.zeros([784, 10]))
+  b = tf.Variable(tf.zeros([10]))
+  y = tf.matmul(x, W) + b
+
+  # Define loss and optimizer
+  y_ = tf.placeholder(tf.float32, [None, 10])
+
+  # The raw formulation of cross-entropy,
+  #
+  #   tf.reduce_mean(-tf.reduce_sum(y_ * tf.log(tf.nn.softmax(y)),
+  #                                 reduction_indices=[1]))
+  #
+  # can be numerically unstable.
+  #
+  # So here we use tf.nn.softmax_cross_entropy_with_logits on the raw
+  # outputs of 'y', and then average across the batch.
+  cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=y, labels=y_))
+  train_step = tf.train.GradientDescentOptimizer(0.5).minimize(cross_entropy)
+
+  sess = tf.InteractiveSession()
+  # Train
+  tf.initialize_all_variables().run()
+  print("-- A halozat tanitasa")  
+  for i in range(1000):
+    batch_xs, batch_ys = mnist.train.next_batch(100)
+    sess.run(train_step, feed_dict={x: batch_xs, y_: batch_ys})
+    if i % 100 == 0:
+      print(i/10, "%")
+  print("----------------------------------------------------------")
+
+  # Test trained model
+  print("-- A halozat tesztelese")  
+  correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_, 1))
+  accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))  
+  print("-- Pontossag: ", sess.run(accuracy, feed_dict={x: mnist.test.images,
+                                      y_: mnist.test.labels}))
+  print("----------------------------------------------------------")
+  
+  print("-- A MNIST 42. tesztkepenek felismerese, mutatom a szamot, a tovabblepeshez csukd be az ablakat")
+  
+  img = mnist.test.images[42]
+  image = img
+
+  matplotlib.pyplot.imshow(image.reshape(28, 28), cmap=matplotlib.pyplot.cm.binary)
+  matplotlib.pyplot.savefig("8.png")  
+  matplotlib.pyplot.show()
+
+  classification = sess.run(tf.argmax(y, 1), feed_dict={x: [image]})
+
+  print("-- Ezt a halozat ennek ismeri fel: ", classification[0])
+  print("----------------------------------------------------------")
+
+  print("-- A sajat kezi 8-asom felismerese, mutatom a szamot, a tovabblepeshez csukd be az ablakat")
+
+  img = readimg()
+  image = img.eval()
+  image = image.reshape(28*28)
+
+  matplotlib.pyplot.imshow(image.reshape(28, 28), cmap=matplotlib.pyplot.cm.binary)
+  matplotlib.pyplot.savefig("8.png")  
+  matplotlib.pyplot.show()
+
+  classification = sess.run(tf.argmax(y, 1), feed_dict={x: [image]})
+
+  print("-- Ezt a halozat ennek ismeri fel: ", classification[0])
+  print("----------------------------------------------------------")
+
+if __name__ == '__main__':
+  parser = argparse.ArgumentParser()
+  parser.add_argument('--data_dir', type=str, default='/tmp/tensorflow/mnist/input_data',
+                      help='Directory for storing input data')
+  FLAGS = parser.parse_args()
+  tf.app.run()
+]]></programlisting>
+        
+    <para>Nézzük a kódot részletesen. </para>
+        <programlisting language="c"><![CDATA[
+# Import data
+from tensorflow.examples.tutorials.mnist import input_data
+
+import tensorflow as tf
+
+import matplotlib.pyplot            
+            ]]></programlisting>
+        <para>Itt includeoljuk az MNIST-es adatbázist, emellett átvesszük a TensorFlowot is.
+            Emellett includeoljuk a matplotlibnek a könyvtárát is. </para>
+        <programlisting language="c"><![CDATA[
+def readimg():
+    file = tf.read_file("hetes.png")
+    img = tf.image.decode_png(file, 1)
+    return img
+            
+            ]]></programlisting>
+        <para>Ebben a függvényben egy képet olvasunk be. A read file amellyel olvassuk be a saját
+            képünket. Aztán dekóduluk a képünket egy tensorrá. Itt változtani kell a kódon, hiszen
+            nem adtunk a függvénynek colotr-chanelt. Mivel greyscalel dolgozunk ezért 1-et adtunk
+            meg értéknek.</para>
+        
+        <programlisting language="c"><![CDATA[
+   def main(_):
+  mnist = input_data.read_data_sets(FLAGS.data_dir, one_hot=True)
+
+  # Create the model
+  x = tf.placeholder(tf.float32, [None, 784])
+  W = tf.Variable(tf.zeros([784, 10]))
+  b = tf.Variable(tf.zeros([10]))
+  y = tf.matmul(x, W) + b
+
+  # Define loss and optimizer
+  y_ = tf.placeholder(tf.float32, [None, 10])         
+            
+            ]]></programlisting>
+        <para>Itt a mainünk. Ebben a main létrehozunk egy modelt. A model egy olyan szerkezet amely
+            tensorokat tartalmaz. Az x változó egy tensor placeholder. A tensor placeholderben
+            változókat tárolunk. Az egyik változó egy tf.float32-es míg a másik egy mátrix. A W
+            tartalmazza a súlyokat. Az y-ban van a tf.matmul egy mátrixokat összeszorzó metódus. Az
+            x-et és a W-t összeszorozzuk és ehhez hozzáadjuk a b-t. </para>
+        <programlisting language="c"><![CDATA[
+ # So here we use tf.nn.softmax_cross_entropy_with_logits on the raw
+  # outputs of 'y', and then average across the batch.
+  
+  cross_entropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=y, labels=y_))
+  train_step = tf.train.GradientDescentOptimizer(0.5).minimize(cross_entropy)            
+            
+            ]]></programlisting>
+        <para>Itt létrehozunk egy cross entropy változót. Itt elvégezünk az y logits és az y labels
+            közötti keresztszorzást. Majd a reduce.mean függvénnyel elvégezzük az értékeknek a
+            dimenziók közötti átlagot. Ezután a train stepnél a cross_entropyt minimalizáljuk. Itt kellett változtani az eredeti kódon hiszen hiányoztak az argumentumok. </para>
+        <programlisting language="c"><![CDATA[
+print("-- A halozat tanitasa")  
+  for i in range(1000):
+    batch_xs, batch_ys = mnist.train.next_batch(100)
+    sess.run(train_step, feed_dict={x: batch_xs, y_: batch_ys})
+    if i % 100 == 0:
+      print(i/10, "%")            
+            ]]></programlisting>
+    <para>Itt tanítjuk a programot az MNIST forrásaival. Az mnist.train.next_batch(100)-el egyszerre
+            100 képet olvasunk be. Ez 10-szer történik meg ugyanis 1000-et olvasunk be. 10%-ként
+            kiírjuk, hogy hol tart a tanulási folyamat.</para>
+        <programlisting language="c"><![CDATA[
+correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_, 1))
+  accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))  
+  print("-- Pontossag: ", sess.run(accuracy, feed_dict={x: mnist.test.images,
+                                      y_: mnist.test.labels}))            ]]>
+        </programlisting>
+        
+        <para>Itt ki írjuk azt,hogy milyen pontosággal dolgozott a programunk.Általában az MNIST-es példák 90% fölötti eredményt tudnak produkálni. </para>
+        <programlisting language="c"><![CDATA[
+
+  print("-- A MNIST 42. tesztkepenek felismerese, mutatom a szamot, a tovabblepeshez csukd be az ablakat")
+  
+  img = mnist.test.images[42]
+  image = img
+
+  matplotlib.pyplot.imshow(image.reshape(28, 28), cmap=matplotlib.pyplot.cm.binary)
+  matplotlib.pyplot.savefig("4.png")  
+  matplotlib.pyplot.show()
+
+  classification = sess.run(tf.argmax(y, 1), feed_dict={x: [image]})            
+            ]]></programlisting>
+       <para>Itt teszteljük le az MNIST-es teszt képekből a 42-diket és átméretezzük 28*28-as méretre és elmentjük a képet 4.png névre. </para> 
+    </section>
+    <section><title>Android telefonra a TF objektum detektálója</title>
+    <para>Ebben a feladatban a TensorFlownak a detektálóját kellett kipróbálni Androidos telefonon.
+            Mivel nem volt leírva a feladatban, hogy az alkalmazást honnan szerezzük be, ezért én
+            Google Playen töltöttem le a TensorFlow Object Detection-t. A telepítéshez engedélyezni
+            kell,hogy a kameránkat használhatja az alkalmazás.</para>
+        <para>Ezután megpróbáltam több féle tárgyat és hát felemás eredményeket adott vissza. A
+            nagyon egyértelmű dolgokat mint például egy műanyag flakont nagyon magas %-al képes
+            feldolgozni. Azonban látható, hogy vannak olyan dolgok amelyek összekeverhetőek,ott már
+            kevesebb %-os hatékonysággal dolgozik. Amit még fontos tudni az pedig, hogy érdemes a
+            feladatokat jó fényhatások közepette elvégezni, ezeket a teszteket, ugyanis kevés
+            fényben nagyon erősen romlik a hatékonysága.</para> 
+        
+        <para>Itt van pár kép amelyet helyesen mutatott. </para>
+    <mediaobject><imageobject><imagedata fileref="mouse.png" ></imagedata></imageobject></mediaobject>
+        <mediaobject><imageobject><imagedata fileref="phone.png" ></imagedata></imageobject></mediaobject>
+        <mediaobject><imageobject><imagedata fileref="bottles.png" ></imagedata></imageobject></mediaobject>
+        <mediaobject><imageobject><imagedata fileref="laptop.png" ></imagedata></imageobject></mediaobject>
+        <para>Illetve itt van 1 rossz példa is.</para>
+        <mediaobject><imageobject><imagedata fileref="wrongobject.png" ></imagedata></imageobject></mediaobject>
+    </section>
+    <section><title>Minecraft Malmö</title>
+        <para>Ebben a feladatban a MineCraft Malmö projektével foglalkozunk. Malmö projektnek az a
+            lényege,hogy a Minecrafton belül tudjuk Mesterséges Intelligenciával kisérletezni és
+            speciális kutatásokat végezni. Az a céljuk, hogy a jövő programozóit egy speciális
+            környezetben tudják tanítani és megszeretetni a programozást. </para>
+        <para>Mivel ez a projekt teljesen nyitott ezért bárki részt vehet ebben. Minecraft korlátlan
+            lehetőséget biztosít számunkra legyen az egyszerű feladat vagy komplexebb mint például
+            egy nagyobb építmény megépítése.</para>
+        <para>A feladatot az UDProg csoportban lévő Youtube videó alapján készítettem, Windowson.</para>
+        
+    </section>
+</chapter>
