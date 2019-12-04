@@ -288,10 +288,20 @@ correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_, 1))
         <para>Szükségünk volt egy frissebb Pythonra, hiszen Python alapú a programunk. Ezután számos
             programot kellett telepíteni ilyenek például: Openjdk, CodeSynthesis XSD és FFmpeg. Ezek
             után kellett a Patheket megadni a JDK-nak  a Malmönek és a CodeSynthesisnek.</para>
-        <para>Miután sikerült feltelepíteni a szükséges dolgokat lehet futtani a példákat. </para>
+        <para>Miután sikerült feltelepíteni a szükséges dolgokat lehet futtani a példákat. Először
+            is futtatni kellett a Minecraftot. Ehhez nyitni kellett egy powershellt és a átkellett
+            lépni a Malmo0.36/Minecraft könyvtárba. Majd ezután futtatni kellett a Minecraftot ezzel
+            a parancssal. </para>
         <programlisting language="c"><![CDATA[
-            python .\tutorial_1.py
+.\Launchbait
             ]]></programlisting>
-        <para>Ezzel a parancssal lehet futattni az alábbi küldetést. Ilyenkor egy külön ablakot nyit és futttatja az alkalmazást. Ebbe az ablakba lehet irányítani a minecraftos karakterünket.</para>
+        <para>Ezután nyitnunk kellett egy másik powershellt ahol abba a mappába kellett lépni
+            amelyeket a mintaküldetéseket tartalmazta. Ez pedig a Malmo0.36/Python_Examples. Ezekben
+            különféle küldetések vannak. Itt az elsőt futattam az alábbi paranccsal.</para>
+        <programlisting language="c"><![CDATA[
+.\tutorial_1.py            
+            ]]></programlisting>
+        <mediaobject><imageobject><imagedata fileref="minecraft.png"></imagedata></imageobject></mediaobject>
+        <para>Amint látható itt futtatjuk az első tutorialt.Ez a legegyszerűbb példa, itt csak egy számláló fut le 10-ről.</para>
     </section>
 </chapter>
