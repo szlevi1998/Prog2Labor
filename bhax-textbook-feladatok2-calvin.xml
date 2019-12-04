@@ -1,6 +1,6 @@
 <chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:lang="hu">
     <info>
-        <title>Helló, Gödel</title>
+        <title>Helló, Calvin</title>
         <keywordset>
             <keyword/>
         </keywordset>
@@ -281,7 +281,17 @@ correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_, 1))
         <para>Mivel ez a projekt teljesen nyitott ezért bárki részt vehet ebben. Minecraft korlátlan
             lehetőséget biztosít számunkra legyen az egyszerű feladat vagy komplexebb mint például
             egy nagyobb építmény megépítése.</para>
-        <para>A feladatot az UDProg csoportban lévő Youtube videó alapján készítettem, Windowson.</para>
-        
+        <para>A feladatot az UDProg csoportban lévő Youtube videó alapján készítettem, Windowson.
+            Szerencsémre a videó segítségével nagyon könnyű volt a telepítés. Sokkal nehezebb lett
+            volna a videó nélkül, hiszen rengeteg programot és driverokat kellett telepítenihez
+            ahhoz, hogy tökéletesen működjön. Leginkább a Pathek megadása okozott volna problémát. </para>
+        <para>Szükségünk volt egy frissebb Pythonra, hiszen Python alapú a programunk. Ezután számos
+            programot kellett telepíteni ilyenek például: Openjdk, CodeSynthesis XSD és FFmpeg. Ezek
+            után kellett a Patheket megadni a JDK-nak  a Malmönek és a CodeSynthesisnek.</para>
+        <para>Miután sikerült feltelepíteni a szükséges dolgokat lehet futtani a példákat. </para>
+        <programlisting language="c"><![CDATA[
+            python .\tutorial_1.py
+            ]]></programlisting>
+        <para>Ezzel a parancssal lehet futattni az alábbi küldetést. Ilyenkor egy külön ablakot nyit és futttatja az alkalmazást. Ebbe az ablakba lehet irányítani a minecraftos karakterünket.</para>
     </section>
 </chapter>

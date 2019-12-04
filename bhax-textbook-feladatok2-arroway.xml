@@ -178,7 +178,12 @@
         </mediaobject>
         <para>Ez a program nagyon hasonlít az eredeti, a JDK-s src fájlaiban is megtaláható random
             generátorra. Itt láthatjuk a Java.util.Random osztályban lévő Randomot és látható benne
-            a hasonlóság.</para>
+            a hasonlóság. Amint láthatjuk a megoldásunk nagyon sok helyen megegyezik, azonban vannak
+            kisebb különbségek. A JDK forrásaiban synchronized azaz szinkronizált metódusokat
+            alkalmaznak. Ennek az a haszna, hogy segít abba, hogy ne legyen szál összeakadás,illetve
+            memória kiegyensúlyozottsági hibákat is megelőzheti a következőképpen: Ha egy objektum
+            látható több szálnak, akkor ezekenek az objektmu változóinak az olvasását és írását már
+            szinkronizált metódusokon történik. </para>
         
         <mediaobject>
             
@@ -367,7 +372,7 @@ PolarGen::kovetkezo ()
             olvashatóság szempontjából sem a legideálisabb. 
         </para>
         <para>Megszokott szintaxus:</para>
-        <programlisting language="java">
+        <programlisting language="c">
             <![CDATA[
             int yoda = 5;
             if (yoda == 5){
@@ -377,7 +382,7 @@ PolarGen::kovetkezo ()
         
         <para>Yodás szintaxus</para>
         
-        <programlisting language="java"> 
+        <programlisting language="c"> 
             <![CDATA[
             int yoda = 6;
             if (6 == yoda){
@@ -389,7 +394,7 @@ PolarGen::kovetkezo ()
         
         <para>És akkor a kód:
         </para>
-            <programlisting language = "java"> <![CDATA[
+            <programlisting language = "c"> <![CDATA[
     public class Yoda
     {
     public static void main(String[]args)

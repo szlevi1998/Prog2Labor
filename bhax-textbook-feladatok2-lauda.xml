@@ -1,6 +1,6 @@
 <chapter xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.0" xml:lang="hu">
     <info>
-        <title>Helló, Gödel</title>
+        <title>Helló, Lauda</title>
         <keywordset>
             <keyword/>
         </keywordset>
@@ -48,6 +48,27 @@
             ]]></programlisting>
         <para>Itt adjuk meg a futtatásnak a módját. Amint lehet látni a localhostot adjuk meg és 1 portot figyel míg az összes többit nem figyelte.</para>
         <mediaobject><imageobject><imagedata fileref="figyeli.png"></imagedata></imageobject></mediaobject>
+        <programlisting language="c"><![CDATA[
+try {
+                
+                java.net.Socket socket = new java.net.Socket(args[0], i);
+                
+                System.out.println(i + " figyeli");
+                
+                socket.close();
+                
+            } catch (Exception e) {
+                
+                System.out.println(i + " nem figyeli");
+                
+            }
+    }            
+            
+            ]]></programlisting>
+        <para>Ez a rész az amely az adott témánkat tartalmazza. A kivételkezelés amely adott esetben
+            azzal foglalkozik, hogy melyik porton képes kapcsolatot létrehozni. A try-ban, ha nem
+            sikerült a kapcsolatlétrehozás akkor egy kivételt dob a program. Majd a catchel elkapjuk
+            és végrehajtuk az adott utasítást.</para>
 
     </section>
     <section><title>Android Játék</title>
